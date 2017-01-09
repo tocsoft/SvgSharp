@@ -1,0 +1,75 @@
+{
+  "version": "0.0.1-*",
+  "title": "SvgSharp.ImageSharp",
+  "description": "ImageSharp renderer for svgs",
+  "authors": [
+    "Scott Williams and contributors"
+  ],
+  "packOptions": {
+    "owners": [
+    "Scott Williams and contributors"
+    ],
+    "projectUrl": "https://github.com/tocsoft/SvgSharp",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "iconUrl": "https://raw.githubusercontent.com/tocsoft/SvgSharp/master/build/icons/svgsharp-logo-128.png",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/tocsoft/SvgSharp"
+    },
+    "tags": [
+      "svg ImageSharp"
+    ]
+  },
+  "buildOptions": {
+    "allowUnsafe": true,
+    "xmlDoc": true,
+    //"additionalArguments": [ "/additionalfile:../Shared/stylecop.json", "/ruleset:../../ImageSharp.ruleset" ],
+    "compile": [
+      "../Shared/*.cs"
+    ]
+  },
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "warningsAsErrors": true,
+        "optimize": true
+      }
+    }
+  },
+  "dependencies": {
+    "StyleCop.Analyzers": {
+      "version": "1.1.0-beta001",
+      "type": "build"
+    },
+    "System.Buffers": "4.0.0"
+  },
+  "frameworks": {
+    "netstandard1.1": {
+      "dependencies": {
+        "System.Collections": "4.0.11",
+        "System.Diagnostics.Debug": "4.0.11",
+        "System.Diagnostics.Tools": "4.0.1",
+        "System.IO": "4.1.0",
+        "System.IO.Compression": "4.1.0",
+        "System.Linq": "4.1.0",
+        "System.ObjectModel": "4.0.12",
+        "System.Resources.ResourceManager": "4.0.1",
+        "System.Runtime.Extensions": "4.1.0",
+        "System.Runtime.InteropServices": "4.1.0",
+        "System.Runtime.Numerics": "4.0.1",
+        "System.Text.Encoding.Extensions": "4.0.11",
+        "System.Threading": "4.0.11",
+        "System.Threading.Tasks": "4.0.11",
+        "System.Threading.Tasks.Parallel": "4.0.1"
+      }
+    },
+    "net45": {
+      "dependencies": {
+        "System.Runtime": "4.0.0",
+        "System.IO": "4.0.0",
+        "System.Threading.Tasks.Parallel": "4.0.0"
+      }
+    }
+  }
+}

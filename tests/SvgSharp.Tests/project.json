@@ -1,0 +1,54 @@
+{
+  "version": "0.0.0-*",
+  "description": "SvgSharp.Tests Class Library",
+  "authors": [ "Scott Williams and contributors" ],
+  "packOptions": {
+    "projectUrl": "https://github.com/tocsoft/SvgSharp",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "tags": [
+      ""
+    ]
+  },
+  "buildOptions": {
+    "allowUnsafe": true
+  },
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "warningsAsErrors": true
+      }
+    }
+  },
+  "dependencies": {
+    "SvgSharp": {
+      "target": "project",
+      "version": "0.0.0-*"
+    },
+    "SvgSharp.ImageSharp": {
+      "target": "project",
+      "version": "0.0.0-*"
+    },
+    "xunit": "2.2.0-*",
+    "dotnet-test-xunit": "2.2.0-*"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0-*"
+        },
+        "Microsoft.CodeCoverage": "1.0.2"
+      }
+    },
+    "net451": {
+      "dependencies": {
+        "SvgSharp.SystemDrawing": {
+          "target": "project",
+          "version": "0.0.0-*"
+        }
+      }
+    }
+  },
+  "testRunner": "xunit"
+}

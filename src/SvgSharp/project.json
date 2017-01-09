@@ -1,0 +1,72 @@
+{
+  "version": "0.0.1-*",
+  "title": "SvgSharp",
+  "description": "A cross-platform library for rendering SVG files; written in C#",
+  "authors": [
+    "Scott Williams and contributors"
+  ],
+  "packOptions": {
+    "owners": [
+    "Scott Williams and contributors"
+    ],
+    "projectUrl": "https://github.com/tocsoft/SvgSharp",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "iconUrl": "https://raw.githubusercontent.com/tocsoft/SvgSharp/master/build/icons/svgsharp-logo-128.png",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/tocsoft/SvgSharp"
+    },
+    "tags": [
+      "svg"
+    ]
+  },
+  "buildOptions": {
+    "allowUnsafe": true,
+    "xmlDoc": true,
+    //"additionalArguments": [ "/additionalfile:../Shared/stylecop.json", "/ruleset:../../ImageSharp.ruleset" ],
+    "compile": [
+      "../Shared/*.cs"
+    ]
+  },
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "warningsAsErrors": true,
+        "optimize": true
+      }
+    }
+  },
+  "dependencies": {
+    "StyleCop.Analyzers": {
+      "version": "1.1.0-beta001",
+      "type": "build"
+    },
+    "System.Buffers": "4.0.0",
+    "System.Xml.ReaderWriter": "4.3.0",
+    "System.Text.RegularExpressions": "4.3.0",
+    "System.Collections.NonGeneric": "4.3.0",
+    "System.Xml.XmlDocument" :  "4.3.0"
+  },
+  "frameworks": {
+    "netstandard1.3": {
+      "dependencies": {
+        "System.Collections": "4.0.11",
+        "System.Diagnostics.Debug": "4.0.11",
+        "System.Diagnostics.Tools": "4.0.1",
+        "System.IO": "4.1.0",
+        "System.IO.Compression": "4.1.0",
+        "System.Linq": "4.1.0",
+        "System.ObjectModel": "4.0.12",
+        "System.Resources.ResourceManager": "4.0.1",
+        "System.Runtime.Extensions": "4.1.0",
+        "System.Runtime.InteropServices": "4.1.0",
+        "System.Runtime.Numerics": "4.0.1",
+        "System.Text.Encoding.Extensions": "4.0.11",
+        "System.Threading": "4.0.11",
+        "System.Threading.Tasks": "4.0.11",
+        "System.Threading.Tasks.Parallel": "4.0.1"
+      }
+    }
+  }
+}
