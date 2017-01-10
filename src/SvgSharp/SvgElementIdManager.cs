@@ -50,8 +50,9 @@ namespace Svg
                 switch (fullUri.Scheme.ToLowerInvariant())
                 {
                     case "file":
+                        throw new NotImplementedException();
                         doc = SvgDocument.Open<SvgDocument>(fullUri.LocalPath.Substring(0, fullUri.LocalPath.Length - hash.Length));
-                        return doc.IdManager.GetElementById(hash);
+                        //return doc.IdManager.GetElementById(hash);
                     case "http":
                     case "https":
                         var httpRequest = WebRequest.Create(uri);
