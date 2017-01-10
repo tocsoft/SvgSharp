@@ -41,6 +41,8 @@ namespace Svg
 
         public virtual SvgElement GetElementById(Uri uri)
         {
+            //TODO make async
+
             if (uri.ToString().StartsWith("url(")) uri = new Uri(uri.ToString().Substring(4).TrimEnd(')'), UriKind.Relative);
             if (!uri.IsAbsoluteUri && this._document.BaseUri != null && !uri.ToString().StartsWith("#"))
             {
@@ -49,21 +51,20 @@ namespace Svg
                 SvgDocument doc;
                 switch (fullUri.Scheme.ToLowerInvariant())
                 {
-                    case "file":
-                        doc = SvgDocument.Open<SvgDocument>(fullUri.LocalPath.Substring(0, fullUri.LocalPath.Length - hash.Length));
-                        return doc.IdManager.GetElementById(hash);
+                    //case "file":
+                    //    doc = SvgDocument.Open<SvgDocument>(fullUri.LocalPath.Substring(0, fullUri.LocalPath.Length - hash.Length));
+                    //    return doc.IdManager.GetElementById(hash);
                     case "http":
                     case "https":
                         var httpRequest = WebRequest.Create(uri);
-                        using (WebResponse webResponse = httpRequest.GetResponse())
+                        using (WebResponse webResponse = httpRequest.GetResponseAsync().GetAwaiter().GetResult())
                         {
-                            doc = SvgDocument.Open<SvgDocument>(webResponse.GetResponseStream());
+                            doc = SvgDocument.Open(webResponse.GetResponseStream());
                             return doc.IdManager.GetElementById(hash);
                         }
                     default:
                         throw new NotSupportedException();
                 }
-
             }
             return this.GetElementById(uri.ToString());
         }

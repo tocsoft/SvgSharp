@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+//using System.Drawing;
+//using System.Drawing.Drawing2D;
 
 namespace Svg.FilterEffects
 {
@@ -34,6 +34,6 @@ namespace Svg.FilterEffects
             get { return (SvgFilter)this.Parent; }
         }
 
-        public abstract void Process(ImageBuffer buffer);
+        public abstract void Process(DrawableBuffer buffer);
     }
 }

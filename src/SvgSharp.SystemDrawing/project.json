@@ -7,7 +7,7 @@
   ],
   "packOptions": {
     "owners": [
-    "Scott Williams and contributors"
+      "Scott Williams and contributors"
     ],
     "projectUrl": "https://github.com/tocsoft/SvgSharp",
     "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
@@ -45,7 +45,7 @@
     "System.Buffers": "4.0.0"
   },
   "frameworks": {
-    "net45": {
+    "net46": {
       "dependencies": {
         "System.Runtime": "4.0.0",
         "System.IO": "4.0.0",

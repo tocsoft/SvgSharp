@@ -160,9 +160,9 @@ namespace Svg
         /// Attempts to open an SVG document from the specified <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream">The <see cref="Stream"/> containing the SVG document to open.</param>
-        public static T Open<T>(Stream stream) where T : SvgDocument, new()
+        public static SvgDocument Open(Stream stream)
         {
-            return Open<T>(stream, null);
+            return Open(stream, null);
         }
 
 
@@ -170,7 +170,7 @@ namespace Svg
         /// Attempts to create an SVG document from the specified string data.
         /// </summary>
         /// <param name="svg">The SVG data.</param>
-        public static T FromSvg<T>(string svg) where T : SvgDocument, new()
+        public static SvgDocument FromSvg(string svg)
         {
             throw new System.NotImplementedException();
             //if (string.IsNullOrEmpty(svg))
@@ -193,19 +193,19 @@ namespace Svg
         /// <param name="stream">The <see cref="Stream"/> containing the SVG document to open.</param>
         /// <param name="entities">Custom entity definitions.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> parameter cannot be <c>null</c>.</exception>
-        public static T Open<T>(Stream stream, Dictionary<string, string> entities) where T : SvgDocument, new()
+        public static SvgDocument Open(Stream stream, Dictionary<string, string> entities)
         {
             throw new System.NotImplementedException();
-            //if (stream == null)
-            //{
-            //    throw new ArgumentNullException("stream");
-            //}
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
 
-            //// Don't close the stream via a dispose: that is the client's job.
-            //var reader = new SvgTextReader(stream, entities);
-            //reader.XmlResolver = new SvgDtdResolver();
-            //reader.WhitespaceHandling = WhitespaceHandling.None;
-            //return Open<T>(reader);
+            // Don't close the stream via a dispose: that is the client's job.
+            var reader = new SvgTextReader(stream, entities);
+            reader.XmlResolver = new SvgDtdResolver();
+            reader.WhitespaceHandling = WhitespaceHandling.None;
+            return Open(reader);
         }
 
         private static T Open<T>(XmlReader reader) where T : SvgDocument, new()

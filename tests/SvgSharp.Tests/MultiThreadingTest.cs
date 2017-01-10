@@ -1,13 +1,14 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Svg.Exceptions;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Svg.UnitTests
 {
 
-    [TestClass]
+    //[TestClass]
     public class MultiThreadingTest : SvgTestHelper
     {
 
@@ -20,14 +21,14 @@ namespace Svg.UnitTests
         }
 
         
-        [TestMethod]
+        [Fact]
         public void TestSingleThread()
         {
             LoadFile();
         }
 
 
-        [TestMethod]
+        [Fact]
         public void TestMultiThread()
         {
             Parallel.For(0, 10, (x) =>
@@ -38,21 +39,23 @@ namespace Svg.UnitTests
         }
 
 
-        [TestMethod]
-        [ExpectedException(typeof(SvgMemoryException))]
+        [Fact]
         public void SVGGivesMemoryExceptionOnTooManyParallelTest()
         {
-            try
+            Assert.Throws<SvgMemoryException>(() =>
             {
-                Parallel.For(0, 50, (x) =>
+                try
                 {
-                    LoadFile();
-                });
-            }
-            catch (AggregateException ex)
-            {
-                throw ex.InnerException;
-            }
+                    Parallel.For(0, 50, (x) =>
+                    {
+                        LoadFile();
+                    });
+                }
+                catch (AggregateException ex)
+                {
+                    throw ex.InnerException;
+                }
+            });
         }
     }
 }

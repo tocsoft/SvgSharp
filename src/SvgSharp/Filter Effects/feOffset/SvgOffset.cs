@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+//using System.Drawing;
 using System.Collections.Generic;
 
 namespace Svg.FilterEffects
@@ -31,29 +31,28 @@ namespace Svg.FilterEffects
 
 
 
-        public override void Process(ImageBuffer buffer)
-		{
-            var inputImage = buffer[this.Input];
-            var result = new Bitmap(inputImage.Width, inputImage.Height);
+        public override void Process(DrawableBuffer buffer)
+        {
+            throw new NotImplementedException();
 
-            var pts = new PointF[] { new PointF(this.Dx.ToDeviceValue(null, UnitRenderingType.Horizontal, null), 
-                                                this.Dy.ToDeviceValue(null, UnitRenderingType.Vertical, null)) };
-            buffer.Transform.TransformVectors(pts);
+            //var inputImage = buffer[this.Input];
+            //var result = new Bitmap(inputImage.Width, inputImage.Height);
 
-            using (var g = Graphics.FromImage(result))
-            {
-                g.DrawImage(inputImage, new Rectangle((int)pts[0].X, (int)pts[0].Y, 
-                                                      inputImage.Width, inputImage.Height),
-                            0, 0, inputImage.Width, inputImage.Height, GraphicsUnit.Pixel);
-                g.Flush();
-            }
-            buffer[this.Result] = result;
-		}
+            //var pts = new PointF[] { new PointF(this.Dx.ToDeviceValue(null, UnitRenderingType.Horizontal, null),
+            //                                    this.Dy.ToDeviceValue(null, UnitRenderingType.Vertical, null)) };
+            //buffer.Transform.TransformVectors(pts);
 
+            //using (var g = Graphics.FromImage(result))
+            //{
+            //    g.DrawImage(inputImage, new Rectangle((int)pts[0].X, (int)pts[0].Y,
+            //                                          inputImage.Width, inputImage.Height),
+            //                0, 0, inputImage.Width, inputImage.Height, GraphicsUnit.Pixel);
+            //    g.Flush();
+            //}
+            //buffer[this.Result] = result;
+        }
 
-
-
-		public override SvgElement DeepCopy()
+        public override SvgElement DeepCopy()
 		{
 			return DeepCopy<SvgOffset>();
 		}

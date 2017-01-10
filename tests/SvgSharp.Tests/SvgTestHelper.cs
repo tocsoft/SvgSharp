@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
+//using System.Drawing.Imaging;
 using System.IO;
 using System.Xml;
+using Xunit;
 
 namespace Svg.UnitTests
 {
@@ -19,7 +20,6 @@ namespace Svg.UnitTests
             get
             {
                 const string msg = "Test file not overridden.";
-                Assert.Inconclusive(msg);
                 throw new NotImplementedException(msg);
             }
         }
@@ -36,7 +36,6 @@ namespace Svg.UnitTests
             get
             {
                 const string msg = "Test resource not overridden.";
-                Assert.Inconclusive(msg);
                 throw new NotImplementedException(msg);
             }
         }
@@ -50,7 +49,7 @@ namespace Svg.UnitTests
             get
             {
                 const string msg = "Expected size not overridden.";
-                Assert.Inconclusive(msg);
+                //Assert.Inconclusive(msg);
                 throw new NotImplementedException(msg);
             }
         }
@@ -90,7 +89,7 @@ namespace Svg.UnitTests
             Trace.WriteLine("Get resource data.");
             var s = this.GetType().Assembly.GetManifestResourceStream(fullResourceString);
             if (s == null)
-                Assert.Fail("Unable to find embedded resource", fullResourceString);
+                Assert.True(false, $"Unable to find embedded resource {fullResourceString}");
             Trace.WriteLine("Done getting resource data.");
             return s;
         }
@@ -148,7 +147,7 @@ namespace Svg.UnitTests
         protected virtual XmlDocument GetXMLDocFromFile(string file)
         {
             if (!File.Exists(file))
-                Assert.Fail("Test file missing.", file);
+                Assert.True(false, $"Test file missing. {file}");
 
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(File.ReadAllText(file));
@@ -183,15 +182,17 @@ namespace Svg.UnitTests
         /// <param name="xml">Svg file data.</param>
         protected virtual void LoadSvg(XmlDocument xml)
         {
-            Trace.WriteLine("SvgDocument open xml.");
             var svgDoc = OpenSvg(xml);
-            Trace.WriteLine("Done SvgDocument open xml.");
+            throw new NotImplementedException();
+            //Trace.WriteLine("SvgDocument open xml.");
+            //var svgDoc = OpenSvg(xml);
+            //Trace.WriteLine("Done SvgDocument open xml.");
 
-            Trace.WriteLine("Draw svg.");
-            var img = DrawSvg(svgDoc);
-            Trace.WriteLine("Done drawing.");
+            //Trace.WriteLine("Draw svg.");
+            //var img = DrawSvg(svgDoc);
+            //Trace.WriteLine("Done drawing.");
 
-            CheckSvg(svgDoc, img);
+            //CheckSvg(svgDoc, img);
         }
 
 
@@ -202,117 +203,118 @@ namespace Svg.UnitTests
         /// <returns>Open SVG document.</returns>
         protected virtual SvgDocument OpenSvg(XmlDocument xml)
         {
-            return SvgDocument.Open(xml);
+            //throw new NotImplementedException();
+            return SvgDocument.FromSvg(xml.OuterXml);
         }
 
 
-        /// <summary>
-        /// Draw SVG.
-        /// </summary>
-        /// <param name="svgDoc">SVG document to draw.</param>
-        /// <returns>SVG as image.</returns>
-        protected virtual Image DrawSvg(SvgDocument svgDoc)
-        {
-            return svgDoc.Draw();
-        }
+        ///// <summary>
+        ///// Draw SVG.
+        ///// </summary>
+        ///// <param name="svgDoc">SVG document to draw.</param>
+        ///// <returns>SVG as image.</returns>
+        //protected virtual Image DrawSvg(SvgDocument svgDoc)
+        //{
+        //    return svgDoc.Draw();
+        //}
 
 
-        /// <summary>
-        /// Check svg file data.
-        /// </summary>
-        /// <param name="svgDoc">Svg document.</param>
-        /// <param name="img">Image of svg file from <paramref name="svgDoc"/>.</param>
-        protected virtual void CheckSvg(SvgDocument svgDoc, Image img)
-        {
-            using (var ms = new MemoryStream())
-            {
-                img.Save(ms, ImageFormat.Png);
-                ms.Flush();
-                Assert.IsTrue(ms.Length >= ExpectedSize, "Svg file does not match expected minimum size.");
-            }
-        }
+        ///// <summary>
+        ///// Check svg file data.
+        ///// </summary>
+        ///// <param name="svgDoc">Svg document.</param>
+        ///// <param name="img">Image of svg file from <paramref name="svgDoc"/>.</param>
+        //protected virtual void CheckSvg(SvgDocument svgDoc, Image img)
+        //{
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        img.Save(ms, ImageFormat.Png);
+        //        ms.Flush();
+        //        Assert.IsTrue(ms.Length >= ExpectedSize, "Svg file does not match expected minimum size.");
+        //    }
+        //}
 
 
-        /// <summary>
-        /// Compare Images.
-        /// </summary>
-        /// <param name="img1">Image 1.</param>
-        /// <param name="img2">Image 2.</param>
-        /// <returns>If images are completely equal: true; otherwise: false</returns>
-        protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2)
-        {
-            float imgEqualPercentage; // To ignore.
-            return ImagesAreEqual(img1, img2, out imgEqualPercentage);
-        }
+        ///// <summary>
+        ///// Compare Images.
+        ///// </summary>
+        ///// <param name="img1">Image 1.</param>
+        ///// <param name="img2">Image 2.</param>
+        ///// <returns>If images are completely equal: true; otherwise: false</returns>
+        //protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2)
+        //{
+        //    float imgEqualPercentage; // To ignore.
+        //    return ImagesAreEqual(img1, img2, out imgEqualPercentage);
+        //}
 
 
-        /// <summary>
-        /// Compare Images.
-        /// </summary>
-        /// <param name="img1">Image 1.</param>
-        /// <param name="img2">Image 2.</param>
-        /// <param name="imgEqualPercentage">Image equal value in percentage. 0.0% == completely unequal. 100.0% == completely equal.</param>
-        /// <returns>If images are completely equal: true; otherwise: false</returns>
-        protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2, out float imgEqualPercentage)
-        {
-            Bitmap imgDiff; // To ignore.
-            return ImagesAreEqual(img1, img2, out imgEqualPercentage, out imgDiff);
-        }
+        ///// <summary>
+        ///// Compare Images.
+        ///// </summary>
+        ///// <param name="img1">Image 1.</param>
+        ///// <param name="img2">Image 2.</param>
+        ///// <param name="imgEqualPercentage">Image equal value in percentage. 0.0% == completely unequal. 100.0% == completely equal.</param>
+        ///// <returns>If images are completely equal: true; otherwise: false</returns>
+        //protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2, out float imgEqualPercentage)
+        //{
+        //    Bitmap imgDiff; // To ignore.
+        //    return ImagesAreEqual(img1, img2, out imgEqualPercentage, out imgDiff);
+        //}
 
 
-        /// <summary>
-        /// Compare Images.
-        /// </summary>
-        /// <param name="img1">Image 1.</param>
-        /// <param name="img2">Image 2.</param>
-        /// <param name="imgEqualPercentage">Image equal value in percentage. 0.0% == completely unequal. 100.0% == completely equal.</param>
-        /// <param name="imgDiff">Image with red pixel where <paramref name="img1"/> and <paramref name="img2"/> are unequal.</param>
-        /// <returns>If images are completely equal: true; otherwise: false</returns>
-        protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2, out float imgEqualPercentage, out Bitmap imgDiff)
-        {
-            // Defaults.
-            var diffColor = Color.Red;
+        ///// <summary>
+        ///// Compare Images.
+        ///// </summary>
+        ///// <param name="img1">Image 1.</param>
+        ///// <param name="img2">Image 2.</param>
+        ///// <param name="imgEqualPercentage">Image equal value in percentage. 0.0% == completely unequal. 100.0% == completely equal.</param>
+        ///// <param name="imgDiff">Image with red pixel where <paramref name="img1"/> and <paramref name="img2"/> are unequal.</param>
+        ///// <returns>If images are completely equal: true; otherwise: false</returns>
+        //protected virtual bool ImagesAreEqual(Bitmap img1, Bitmap img2, out float imgEqualPercentage, out Bitmap imgDiff)
+        //{
+        //    // Defaults.
+        //    var diffColor = Color.Red;
 
-            // Reset.
-            imgEqualPercentage = 0;
-            imgDiff = null;
+        //    // Reset.
+        //    imgEqualPercentage = 0;
+        //    imgDiff = null;
 
-            // Requirements.
-            if (img1 == null)
-                return false;
-            if (img2 == null)
-                return false;
-            if (img1.Size.Width < 1 && img1.Height < 1)
-                return false;
-            if (!img1.Size.Equals(img2.Size))
-                return false;
+        //    // Requirements.
+        //    if (img1 == null)
+        //        return false;
+        //    if (img2 == null)
+        //        return false;
+        //    if (img1.Size.Width < 1 && img1.Height < 1)
+        //        return false;
+        //    if (!img1.Size.Equals(img2.Size))
+        //        return false;
 
-            // Compare bitmaps.
-            imgDiff = new Bitmap(img1.Size.Width, img1.Size.Height);
-            int diffPixelCount = 0;
-            for (int i = 0; i < img1.Width; ++i)
-            {
-                for (int j = 0; j < img1.Height; ++j)
-                {
-                    Color color;
-                    if ((color = img1.GetPixel(i, j)) == img2.GetPixel(i, j))
-                    {
-                        imgDiff.SetPixel(i, j, color);
-                    }
-                    else
-                    {
-                        ++diffPixelCount;
-                        imgDiff.SetPixel(i, j, diffColor);
-                    }
-                }
-            }
+        //    // Compare bitmaps.
+        //    imgDiff = new Bitmap(img1.Size.Width, img1.Size.Height);
+        //    int diffPixelCount = 0;
+        //    for (int i = 0; i < img1.Width; ++i)
+        //    {
+        //        for (int j = 0; j < img1.Height; ++j)
+        //        {
+        //            Color color;
+        //            if ((color = img1.GetPixel(i, j)) == img2.GetPixel(i, j))
+        //            {
+        //                imgDiff.SetPixel(i, j, color);
+        //            }
+        //            else
+        //            {
+        //                ++diffPixelCount;
+        //                imgDiff.SetPixel(i, j, diffColor);
+        //            }
+        //        }
+        //    }
 
-            // Calculate percentage.
-            int totalPixelCount = img1.Width * img1.Height;
-            var imgDiffFactor = ((float)diffPixelCount / totalPixelCount);
-            imgEqualPercentage = imgDiffFactor * 100;
+        //    // Calculate percentage.
+        //    int totalPixelCount = img1.Width * img1.Height;
+        //    var imgDiffFactor = ((float)diffPixelCount / totalPixelCount);
+        //    imgEqualPercentage = imgDiffFactor * 100;
             
-            return (imgDiffFactor == 1f);
-        }
+        //    return (imgDiffFactor == 1f);
+        //}
     }
 }

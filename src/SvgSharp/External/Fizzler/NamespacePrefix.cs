@@ -26,7 +26,7 @@ namespace Fizzler
     /// <summary>
     /// Represent a type or attribute name.
     /// </summary>
-    [Serializable]
+    //[Serializable]
     public struct NamespacePrefix
     {
         /// <summary>
