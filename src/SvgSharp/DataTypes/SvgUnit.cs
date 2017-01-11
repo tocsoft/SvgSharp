@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 //using System.Drawing;
 
 namespace Svg
@@ -96,7 +97,7 @@ namespace Svg
                     {
                         if (currFont == null)
                         {
-                            points = (float)(value * 9);
+                            points = value * 9.0f;
                             _deviceValue = (points / 72.0f) * ppi;
                         }
                         else
@@ -110,7 +111,7 @@ namespace Svg
                     {
                         if (currFont == null)
                         {
-                            points = (float)(value * 9);
+                            points = value * 9.0f;
                             _deviceValue = (points * 0.5f / 72.0f) * ppi;
                         }
                         else
@@ -120,13 +121,13 @@ namespace Svg
                         break;
                     }
                 case SvgUnitType.Centimeter:
-                    _deviceValue = (float)((value / cmInInch) * ppi);
+                    _deviceValue = (value / cmInInch) * ppi;
                     break;
                 case SvgUnitType.Inch:
                     _deviceValue = value * ppi;
                     break;
                 case SvgUnitType.Millimeter:
-                    _deviceValue = (float)((value / 10) / cmInInch) * ppi;
+                    _deviceValue = ((value / 10) / cmInInch) * ppi;
                     break;
                 case SvgUnitType.Pica:
                     _deviceValue = ((value * 12) / 72) * ppi;
@@ -181,7 +182,12 @@ namespace Svg
         {
             if (owner == null) return null;
             var visual = owner.Parents.OfType<SvgVisualElement>().FirstOrDefault();
-            return visual?.GetFont(renderer);
+            if (visual != null)
+            {
+                return visual.GetFont(renderer);
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using ExCSS;
+using System.Reflection;
 
 namespace Svg
 {
@@ -24,21 +25,31 @@ namespace Svg
         {
             get
             {
-                throw new NotImplementedException();
-                //if (availableElements == null)
-                //{
-                //    var svgTypes = from t in typeof(SvgDocument).Assembly.GetExportedTypes()
-                //                   where t.GetCustomAttributes(typeof(SvgElementAttribute), true).Length > 0
-                //                   && t.IsSubclassOf(typeof(SvgElement))
-                //                   select new ElementInfo { ElementName = ((SvgElementAttribute)t.GetCustomAttributes(typeof(SvgElementAttribute), true)[0]).ElementName, ElementType = t };
+                if (availableElements == null)
+                {
+                    var allTypes = typeof(SvgDocument).GetTypeInfo().Assembly.GetExportedTypes();
 
-                //    availableElements = (from t in svgTypes
-                //                         where t.ElementName != "svg"
-                //                         group t by t.ElementName into types
-                //                         select types).ToDictionary(e => e.Key, e => e.SingleOrDefault());
-                //}
+                    var withElms = allTypes.Select(x => new
+                    {
+                        type = x,
+                        elementatributes = x.GetTypeInfo().GetCustomAttributes<SvgElementAttribute>(true)
+                    }).ToList();
 
-                //return availableElements;
+                    var svgTypesFilterd = withElms.Where(x => x.elementatributes.Any() && typeof(SvgElement).IsAssignableFrom(x.type)).ToArray();
+
+                    var svgTypes = svgTypesFilterd.Select(t => new ElementInfo
+                    {
+                        ElementName = t.elementatributes.First().ElementName,
+                        ElementType = t.type
+                    }); 
+
+                    availableElements = (from t in svgTypes
+                                         where t.ElementName != "svg"
+                                         group t by t.ElementName into types
+                                         select types).ToDictionary(e => e.Key, e => e.SingleOrDefault());
+                }
+
+                return availableElements;
             }
         }
 
@@ -227,82 +238,94 @@ namespace Svg
             return false;
         }
 
-      //  private static Dictionary<Type, Dictionary<string, PropertyDescriptorCollection>> _propertyDescriptors = new Dictionary<Type, Dictionary<string, PropertyDescriptorCollection>>();
+        private static Dictionary<Type, Dictionary<string, PropertyInfoCollection>> _propertyDescriptors = new Dictionary<Type, Dictionary<string, PropertyInfoCollection>>();
         private static object syncLock = new object();
 
         internal static void SetPropertyValue(SvgElement element, string attributeName, string attributeValue, SvgDocument document)
         {
-            throw new NotImplementedException();
-     //       var elementType = element.GetType();
+            var elementType = element.GetType();
+            
+            PropertyInfoCollection properties;
+            lock (syncLock)
+            {
+                if (!_propertyDescriptors.Keys.Contains(elementType))
+                {
+                    _propertyDescriptors.Add(elementType, new Dictionary<string, PropertyInfoCollection>());
+                }
 
-     //       PropertyDescriptorCollection properties;
-     //       lock (syncLock)
-     //       {
-     //           if (_propertyDescriptors.Keys.Contains(elementType))
-     //           {
-     //               if (_propertyDescriptors[elementType].Keys.Contains(attributeName))
-     //               {
-     //                   properties = _propertyDescriptors[elementType][attributeName];
-     //               }
-     //               else
-     //               {
-     //                   properties = TypeDescriptor.GetProperties(elementType, new[] { new SvgAttributeAttribute(attributeName) });
-     //                   _propertyDescriptors[elementType].Add(attributeName, properties);
-     //               }
-     //           }
-     //           else
-     //           {
-     //               properties = TypeDescriptor.GetProperties(elementType, new[] { new SvgAttributeAttribute(attributeName) });
-     //               _propertyDescriptors.Add(elementType, new Dictionary<string, PropertyDescriptorCollection>());
+                if (_propertyDescriptors[elementType].Keys.Contains(attributeName))
+                {
+                    properties = _propertyDescriptors[elementType][attributeName];
+                }
+                else
+                {
+                    properties = new PropertyInfoCollection(elementType);//, new[] { new SvgAttributeAttribute(attributeName) });
+                    _propertyDescriptors[elementType].Add(attributeName, properties);
+                }
+            }
 
-     //               _propertyDescriptors[elementType].Add(attributeName, properties);
-     //           } 
-     //       }
+            if (properties.Count > 0)
+            {
+                PropertyInfo descriptor = properties[0];
 
-     //       if (properties.Count > 0)
-     //       {
-     //           PropertyDescriptor descriptor = properties[0];
+                try
+                {
+                    if (attributeName == "opacity" && attributeValue == "undefined")
+                    {
+                        attributeValue = "1";
+                    }
 
-     //           try
-     //           {
-					//if (attributeName == "opacity" && attributeValue == "undefined")
-					//{
-					//	attributeValue = "1";
-					//}
+                    throw new NotImplementedException();
+                    //descriptor.SetValue(element, descriptor.Converter.ConvertFrom(document, CultureInfo.InvariantCulture, attributeValue));
 
-					//descriptor.SetValue(element, descriptor.Converter.ConvertFrom(document, CultureInfo.InvariantCulture, attributeValue));
-					
 
-     //           }
-     //           catch
-     //           {
-     //               Trace.TraceWarning(string.Format("Attribute '{0}' cannot be set - type '{1}' cannot convert from string '{2}'.", attributeName, descriptor.PropertyType.FullName, attributeValue));
-     //           }
-     //       }
-     //       else
-     //       {
-     //           //check for namespace declaration in svg element
-     //           if (string.Equals(element.ElementName, "svg", StringComparison.OrdinalIgnoreCase))
-     //           {
-     //               if (string.Equals(attributeName, "xmlns", StringComparison.OrdinalIgnoreCase)
-     //                   || string.Equals(attributeName, "xlink", StringComparison.OrdinalIgnoreCase)
-     //                   || string.Equals(attributeName, "xmlns:xlink", StringComparison.OrdinalIgnoreCase)
-     //                   || string.Equals(attributeName, "version", StringComparison.OrdinalIgnoreCase))
-     //               {
-     //                   //nothing to do
-     //               }
-     //               else
-     //               {
-     //                   //attribute is not a svg attribute, store it in custom attributes
-     //                   element.CustomAttributes[attributeName] = attributeValue;
-     //               }
-     //           }
-     //           else
-     //           {
-     //               //attribute is not a svg attribute, store it in custom attributes
-     //               element.CustomAttributes[attributeName] = attributeValue;
-     //           }
-     //       }
+                }
+                catch
+                {
+                    //Trace.TraceWarning(string.Format("Attribute '{0}' cannot be set - type '{1}' cannot convert from string '{2}'.", attributeName, descriptor.PropertyType.FullName, attributeValue));
+                }
+            }
+            else
+            {
+                //check for namespace declaration in svg element
+                if (string.Equals(element.ElementName, "svg", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.Equals(attributeName, "xmlns", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(attributeName, "xlink", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(attributeName, "xmlns:xlink", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(attributeName, "version", StringComparison.OrdinalIgnoreCase))
+                    {
+                        //nothing to do
+                    }
+                    else
+                    {
+                        //attribute is not a svg attribute, store it in custom attributes
+                        element.CustomAttributes[attributeName] = attributeValue;
+                    }
+                }
+                else
+                {
+                    //attribute is not a svg attribute, store it in custom attributes
+                    element.CustomAttributes[attributeName] = attributeValue;
+                }
+            }
+        }
+
+        internal sealed class PropertyInfoCollection : System.Collections.ObjectModel.KeyedCollection<string, PropertyInfo>
+        {
+            public PropertyInfoCollection(Type type)
+            {
+
+                var properties = type.GetTypeInfo().DeclaredProperties;
+                foreach(var p in properties)
+                {
+                    this.Add(p);
+                }
+            }
+            protected override string GetKeyForItem(PropertyInfo item)
+            {
+                return item.Name;
+            }
         }
 
         /// <summary>

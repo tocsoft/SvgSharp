@@ -1,7 +1,8 @@
-﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Xunit;
 
 namespace Svg.UnitTests
 {
@@ -10,15 +11,14 @@ namespace Svg.UnitTests
     /// text element has contains only text and now other elements like <see cref="SvgTextSpan"/>.
     /// </summary>
     /// <seealso cref="Svg.UnitTests.SvgTestHelper" />
-    [TestClass]
     public class SvgTextElementDeepCopyTest : SvgTestHelper
     {
-        private const string PureTextElementSvg = "Issue_TextElement.Text.svg";
+        private const string PureTextElementSvg = "Issue_TextElement\\Text.svg";
         
-        [TestMethod]
+        [Fact]
         public void TestSvgTextElementDeepCopy()
         {
-            var svgDocument = OpenSvg(GetResourceXmlDoc(GetFullResourceString(PureTextElementSvg)));
+            var svgDocument = OpenSvg(PureTextElementSvg);
             CheckDocument(svgDocument);
 
             var deepCopy = (SvgDocument)svgDocument.DeepCopy<SvgDocument>();
@@ -31,12 +31,12 @@ namespace Svg.UnitTests
         /// <param name="svgDocument">The SVG document to check.</param>
         private static void CheckDocument(SvgDocument svgDocument)
         {
-            Assert.AreEqual(2, svgDocument.Children.Count);
-            Assert.IsInstanceOfType(svgDocument.Children[0], typeof(SvgDefinitionList));
-            Assert.IsInstanceOfType(svgDocument.Children[1], typeof(SvgText));
+            Assert.Equal(2, svgDocument.Children.Count);
+            Assert.IsType< SvgDefinitionList>(svgDocument.Children[0]);
+            Assert.IsType< SvgText>(svgDocument.Children[1]);
 
             var textElement = (SvgText)svgDocument.Children[1];
-            Assert.AreEqual("IP", textElement.Content);
+            Assert.Equal("IP", textElement.Content);
 
             var memoryStream = new MemoryStream();
             svgDocument.Write(memoryStream);
@@ -46,7 +46,7 @@ namespace Svg.UnitTests
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(memoryStream);
 
-            Assert.AreEqual(2, xmlDocument.ChildNodes.Count);
+            Assert.Equal(2, xmlDocument.ChildNodes.Count);
             var svgNode = xmlDocument.ChildNodes[1];
 
             // Filter all significant whitespaces.
@@ -56,11 +56,11 @@ namespace Svg.UnitTests
                 .OfType<XmlNode>()
                 .ToArray();
 
-            Assert.AreEqual(2, svgChildren.Length);
+            Assert.Equal(2, svgChildren.Length);
             var textNode = svgChildren[1];
 
-            Assert.AreEqual("text", textNode.Name);
-            Assert.AreEqual("IP", textNode.InnerText);
+            Assert.Equal("text", textNode.Name);
+            Assert.Equal("IP", textNode.InnerText);
         }
     }
 }

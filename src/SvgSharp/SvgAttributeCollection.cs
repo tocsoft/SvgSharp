@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -157,7 +158,7 @@ namespace Svg
         
         private bool IsValueType(object obj) 
         {
-        	return obj != null && obj.GetType().IsValueType;
+        	return obj != null && obj.GetType().GetTypeInfo().IsValueType;
         }
         
         /// <summary>

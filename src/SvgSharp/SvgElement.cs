@@ -9,6 +9,7 @@ using Svg.Transforms;
 using System.Reflection;
 using System.Threading;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Svg
 {
@@ -545,99 +546,101 @@ namespace Svg
                 writer.WriteEndElement();
             }
         }
-        //protected virtual void WriteAttributes(XmlWriter writer)
-        //{
-        //    var styles = new Dictionary<string, string>();
-        //    bool writeStyle;
-        //    bool forceWrite;
+        protected virtual void WriteAttributes(XmlWriter writer)
+        {
+            throw new NotImplementedException();
 
-        //    //properties
-        //    foreach (var attr in _svgPropertyAttributes)
-        //    {
-        //        if (attr.Property.Converter.CanConvertTo(typeof(string)) && 
-        //            (!attr.Attribute.InAttributeDictionary || _attributes.ContainsKey(attr.Attribute.Name)))
-        //        {
-        //            object propertyValue = attr.Property.GetValue(this);
-        //            string value = (string)attr.Property.Converter.ConvertTo(propertyValue, typeof(string));
+            //var styles = new Dictionary<string, string>();
+            //bool writeStyle;
+            //bool forceWrite;
 
-        //            forceWrite = false;
-        //            writeStyle = (attr.Attribute.Name == "fill");
+            ////properties
+            //foreach (var attr in _svgPropertyAttributes)
+            //{
+            //    if (attr.Property.Converter.CanConvertTo(typeof(string)) &&
+            //        (!attr.Attribute.InAttributeDictionary || _attributes.ContainsKey(attr.Attribute.Name)))
+            //    {
+            //        object propertyValue = attr.Property.GetValue(this);
+            //        string value = (string)attr.Property.Converter.ConvertTo(propertyValue, typeof(string));
 
-        //            if (writeStyle && (Parent != null))
-        //            {
-        //            	if(propertyValue == SvgColourServer.NotSet) continue;
-                    	
-        //                object parentValue;
-        //                if (TryResolveParentAttributeValue(attr.Attribute.Name, out parentValue))
-        //                {
-        //                    if ((parentValue == propertyValue) 
-        //                        || ((parentValue != null) &&  parentValue.Equals(propertyValue)))
-        //                        continue;
-                            
-        //                    forceWrite = true;
-        //                }
-        //            }
+            //        forceWrite = false;
+            //        writeStyle = (attr.Attribute.Name == "fill");
 
-        //            if (propertyValue != null)
-        //            {
-        //                var type = propertyValue.GetType();
-                        
-        //                //Only write the attribute's value if it is not the default value, not null/empty, or we're forcing the write.
-        //                if ((!string.IsNullOrEmpty(value) && !SvgDefaults.IsDefault(attr.Attribute.Name, value)) || forceWrite)
-        //                {
-        //                    if (writeStyle)
-        //                    {
-        //                        styles[attr.Attribute.Name] = value;
-        //                    }
-        //                    else
-        //                    {
-        //                        writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
-        //                    }
-        //                }
-        //            }
-        //            else if(attr.Attribute.Name == "fill") //if fill equals null, write 'none'
-        //            {
-        //                if (writeStyle)
-        //                {
-        //                    styles[attr.Attribute.Name] = value;
-        //                }
-        //                else
-        //                {
-        //                    writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
-        //                }
-        //            }
-        //        }
-        //    }
+            //        if (writeStyle && (Parent != null))
+            //        {
+            //            if (propertyValue == SvgColourServer.NotSet) continue;
 
-        //    //events
-        //    if(AutoPublishEvents)
-        //    {
-	       //     foreach (var attr in _svgEventAttributes)
-	       //     {
-	       //         var evt = attr.Event.GetValue(this);
+            //            object parentValue;
+            //            if (TryResolveParentAttributeValue(attr.Attribute.Name, out parentValue))
+            //            {
+            //                if ((parentValue == propertyValue)
+            //                    || ((parentValue != null) && parentValue.Equals(propertyValue)))
+            //                    continue;
 
-	       //         //if someone has registered publish the attribute
-	       //         if (evt != null && !string.IsNullOrEmpty(this.ID))
-	       //         {
-	       //             writer.WriteAttributeString(attr.Attribute.Name, this.ID + "/" + attr.Attribute.Name);
-	       //         }
-	       //     }
-        //    }
+            //                forceWrite = true;
+            //            }
+            //        }
 
-        //    //add the custom attributes
-        //    foreach (var item in this._customAttributes)
-        //    {
-        //        writer.WriteAttributeString(item.Key, item.Value);
-        //    }
+            //        if (propertyValue != null)
+            //        {
+            //            var type = propertyValue.GetType();
 
-        //    //write the style property
-        //    if (styles.Any())
-        //    {
-        //        writer.WriteAttributeString("style", (from s in styles
-        //                                              select s.Key + ":" + s.Value + ";").Aggregate((p,c) => p + c));
-        //    }
-        //}
-        
+            //            //Only write the attribute's value if it is not the default value, not null/empty, or we're forcing the write.
+            //            if ((!string.IsNullOrEmpty(value) && !SvgDefaults.IsDefault(attr.Attribute.Name, value)) || forceWrite)
+            //            {
+            //                if (writeStyle)
+            //                {
+            //                    styles[attr.Attribute.Name] = value;
+            //                }
+            //                else
+            //                {
+            //                    writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
+            //                }
+            //            }
+            //        }
+            //        else if (attr.Attribute.Name == "fill") //if fill equals null, write 'none'
+            //        {
+            //            if (writeStyle)
+            //            {
+            //                styles[attr.Attribute.Name] = value;
+            //            }
+            //            else
+            //            {
+            //                writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
+            //            }
+            //        }
+            //    }
+            //}
+
+            ////events
+            //if (AutoPublishEvents)
+            //{
+            //    foreach (var attr in _svgEventAttributes)
+            //    {
+            //        var evt = attr.Event.GetValue(this);
+
+            //        //if someone has registered publish the attribute
+            //        if (evt != null && !string.IsNullOrEmpty(this.ID))
+            //        {
+            //            writer.WriteAttributeString(attr.Attribute.Name, this.ID + "/" + attr.Attribute.Name);
+            //        }
+            //    }
+            //}
+
+            ////add the custom attributes
+            //foreach (var item in this._customAttributes)
+            //{
+            //    writer.WriteAttributeString(item.Key, item.Value);
+            //}
+
+            ////write the style property
+            //if (styles.Any())
+            //{
+            //    writer.WriteAttributeString("style", (from s in styles
+            //                                          select s.Key + ":" + s.Value + ";").Aggregate((p, c) => p + c));
+            //}
+        }
+
         public bool AutoPublishEvents = true;
 
         private bool TryResolveParentAttributeValue(string attributeKey, out object parentAttributeValue)
@@ -663,47 +666,47 @@ namespace Svg
             return resolved;
         }
 
-        //public virtual void Write(XmlTextWriter writer)
-        //{
-        //    if (ShouldWriteElement())
-        //    {
-        //        this.WriteStartElement(writer);
-        //        this.WriteChildren(writer);
-        //        this.WriteEndElement(writer);
-        //    }
-        //}
+        public virtual void Write(XmlWriter writer)
+        {
+            if (ShouldWriteElement())
+            {
+                this.WriteStartElement(writer);
+                this.WriteChildren(writer);
+                this.WriteEndElement(writer);
+            }
+        }
 
-        //protected virtual void WriteChildren(XmlTextWriter writer)
-        //{
-        //    if (this.Nodes.Any())
-        //    {
-        //        SvgContentNode content;
-        //        foreach (var node in this.Nodes)
-        //        {
-        //            content = node as SvgContentNode;
-        //            if (content == null)
-        //            {
-        //                ((SvgElement)node).Write(writer);
-        //            }
-        //            else if (!string.IsNullOrEmpty(content.Content))
-        //            {
-        //                writer.WriteString(content.Content);
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //write the content
-        //        if(!String.IsNullOrEmpty(this.Content))
-        //            writer.WriteString(this.Content);
+        protected virtual void WriteChildren(XmlWriter writer)
+        {
+            if (this.Nodes.Any())
+            {
+                SvgContentNode content;
+                foreach (var node in this.Nodes)
+                {
+                    content = node as SvgContentNode;
+                    if (content == null)
+                    {
+                        ((SvgElement)node).Write(writer);
+                    }
+                    else if (!string.IsNullOrEmpty(content.Content))
+                    {
+                        writer.WriteString(content.Content);
+                    }
+                }
+            }
+            else
+            {
+                //write the content
+                if (!String.IsNullOrEmpty(this.Content))
+                    writer.WriteString(this.Content);
 
-        //        //write all children
-        //        foreach (SvgElement child in this.Children)
-        //        {
-        //            child.Write(writer);
-        //        }
-        //    }
-        //}
+                //write all children
+                foreach (SvgElement child in this.Children)
+                {
+                    child.Write(writer);
+                }
+            }
+        }
 
         /// <summary>
         /// Renders the <see cref="SvgElement"/> and contents to the specified <see cref="ISvgRenderer"/> object.

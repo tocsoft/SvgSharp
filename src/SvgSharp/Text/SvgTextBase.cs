@@ -6,15 +6,16 @@ using System.ComponentModel;
 
 using Svg.DataTypes;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svg
 {
     public abstract class SvgTextBase : SvgVisualElement
     {
-        [CLSCompliant(false)] protected SvgUnitCollection _x = new SvgUnitCollection();
-        [CLSCompliant(false)] protected SvgUnitCollection _y = new SvgUnitCollection();
-        [CLSCompliant(false)] protected SvgUnitCollection _dy = new SvgUnitCollection();
-        [CLSCompliant(false)] protected SvgUnitCollection _dx = new SvgUnitCollection();
+        protected SvgUnitCollection _x = new SvgUnitCollection();
+        protected SvgUnitCollection _y = new SvgUnitCollection();
+        protected SvgUnitCollection _dy = new SvgUnitCollection();
+        protected SvgUnitCollection _dx = new SvgUnitCollection();
         private string _rotate;
         private List<float> _rotations = new List<float>();
 
@@ -287,7 +288,7 @@ namespace Svg
         //}
         protected virtual float GetAuthorPathLength()
         {
-            return 0;
+            return 0f;
         }
         
         //private GraphicsPath _path;
@@ -518,11 +519,11 @@ namespace Svg
 
         private class TextDrawingState
         {
-            private float _xAnchor = float.MinValue;
+            //private float _xAnchor = float.MinValue;
             //private IList<GraphicsPath> _anchoredPaths = new List<GraphicsPath>();
             //private GraphicsPath _currPath = null;
             //private GraphicsPath _finalPath = null;
-            private float _authorPathLength = 0;
+            //private float _authorPathLength = 0;
 
             //public GraphicsPath BaselinePath { get; set; }
             public PointF Current { get; set; }

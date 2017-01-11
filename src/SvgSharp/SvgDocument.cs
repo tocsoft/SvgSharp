@@ -17,6 +17,7 @@ using System.Threading;
 using System.Globalization;
 using Svg.Exceptions;
 using SvgSharp;
+using System.Threading.Tasks;
 
 namespace Svg
 {
@@ -132,45 +133,45 @@ namespace Svg
         //    return Open<T>(path, null);
         //}
 
-        ///// <summary>
-        ///// Opens the document at the specified path and loads the SVG contents.
-        ///// </summary>
-        ///// <param name="path">A <see cref="string"/> containing the path of the file to open.</param>
-        ///// <param name="entities">A dictionary of custom entity definitions to be used when resolving XML entities within the document.</param>
-        ///// <returns>An <see cref="SvgDocument"/> with the contents loaded.</returns>
-        ///// <exception cref="FileNotFoundException">The document at the specified <paramref name="path"/> cannot be found.</exception>
-        //public static T Open<T>(string path, Dictionary<string, string> entities) where T : SvgDocument, new()
-        //{
-        //    if (string.IsNullOrEmpty(path))
-        //    {
-        //        throw new ArgumentNullException("path");
-        //    }
+        /// <summary>
+        /// Opens the document at the specified path and loads the SVG contents.
+        /// </summary>
+        /// <param name="path">A <see cref="string"/> containing the path of the file to open.</param>
+        /// <param name="entities">A dictionary of custom entity definitions to be used when resolving XML entities within the document.</param>
+        /// <returns>An <see cref="SvgDocument"/> with the contents loaded.</returns>
+        /// <exception cref="FileNotFoundException">The document at the specified <paramref name="path"/> cannot be found.</exception>
+        public static SvgDocument Open(string path) //where T : SvgDocument, new()
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentNullException("path");
+            }
 
-        //    if (!File.Exists(path))
-        //    {
-        //        throw new FileNotFoundException("The specified document cannot be found.", path);
-        //    }
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("The specified document cannot be found.", path);
+            }
 
-        //    using (var stream = File.OpenRead(path))
-        //    {
-        //        var doc = Open<T>(stream, entities);
-        //        doc.BaseUri = new Uri(System.IO.Path.GetFullPath(path));
-        //        return doc;
-        //    }
-        //}
+            using (var stream = File.OpenRead(path))
+            {
+                var doc = Open(stream);
+                doc.BaseUri = new Uri(System.IO.Path.GetFullPath(path));
+                return doc;
+            }
+        }
 
         /// <summary>
         /// Attempts to open an SVG document from the specified <see cref="Stream"/>.
         /// </summary>
         /// <param name="stream">The <see cref="Stream"/> containing the SVG document to open.</param>
-        public static T Open<T>(Stream stream) where T : SvgDocument, new()
+        public static SvgDocument Open(Stream stream)
         {
             var reader = XmlReader.Create(stream, new XmlReaderSettings()
             {
 
             });
 
-            return Open<T>(reader);
+            return Open(reader);
         }
 
 
@@ -178,7 +179,7 @@ namespace Svg
         /// Attempts to create an SVG document from the specified string data.
         /// </summary>
         /// <param name="svg">The SVG data.</param>
-        public static T FromSvg<T>(string svg) where T : SvgDocument, new()
+        public static SvgDocument FromSvg(string svg) 
         {
 
             using (var strReader = new System.IO.StringReader(svg))
@@ -187,18 +188,18 @@ namespace Svg
                 {
 
                 });
-                return Open<T>(reader);
+                return Open(reader);
             }
         }
 
 
-        private static T Open<T>(XmlReader reader) where T : SvgDocument, new()
+        private static SvgDocument Open(XmlReader reader)
         {
             var elementStack = new Stack<SvgElement>();
             bool elementEmpty;
             SvgElement element = null;
             SvgElement parent;
-            T svgDocument = null;
+            SvgDocument svgDocument = null;
 			var elementFactory = new SvgElementFactory();
 
             var styles = new List<ISvgNode>();
@@ -220,7 +221,7 @@ namespace Svg
                             }
                             else
                             {
-                                svgDocument = elementFactory.CreateDocument<T>(reader);
+                                svgDocument = elementFactory.CreateDocument<SvgDocument>(reader);
                                 element = svgDocument;
                             }
 
@@ -277,9 +278,12 @@ namespace Svg
                             break;
                     }
                 }
-                catch (Exception exc)
+                catch (Exception)
                 {
                     //Trace.TraceError(exc.Message);
+#if DEBUG
+                    throw;
+#endif
                 }
             }
 
@@ -331,22 +335,7 @@ namespace Svg
             }
         }
 
-        /// <summary>
-        /// Opens an SVG document from the specified <see cref="XmlDocument"/>.
-        /// </summary>
-        /// <param name="document">The <see cref="XmlDocument"/> containing the SVG document XML.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="document"/> parameter cannot be <c>null</c>.</exception>
-        public static SvgDocument Open(XmlDocument document)
-        {
-            if (document == null)
-            {
-                throw new ArgumentNullException("document");
-            }
-
-            var reader = new SvgNodeReader(document.DocumentElement, null);
-            return Open<SvgDocument>(reader);
-        }
-
+       
 #if ORIGIN
         public static Bitmap OpenAsBitmap(string path)
         {
@@ -517,28 +506,31 @@ namespace Svg
         }
 #endif
 
-        //public override void Write(XmlTextWriter writer)
-        //{
-        //    //Save previous culture and switch to invariant for writing
-        //    var previousCulture = Thread.CurrentThread.CurrentCulture;
-        //    try {
-        //        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-        //        base.Write(writer);
-        //    }
-        //    finally
-        //    {
-        //        // Make sure to set back the old culture even an error occurred.
-        //        //Switch culture back
-        //        Thread.CurrentThread.CurrentCulture = previousCulture;
-        //    }
-        //}
-
-#if ORIGIN
+       public override void Write(XmlWriter writer)
+       {
+           //Save previous culture and switch to invariant for writing
+           //var previousCulture = Thread.CurrentThread.CurrentCulture;
+           try {
+               //Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+               base.Write(writer);
+           }
+           finally
+           {
+               // Make sure to set back the old culture even an error occurred.
+               //Switch culture back
+               //Thread.CurrentThread.CurrentCulture = previousCulture;
+           }
+       }
+        private static readonly UTF8Encoding UTF8NoBom = new System.Text.UTF8Encoding(false);
         public void Write(Stream stream, bool useBom = true)
         {
 
-            var xmlWriter = new XmlTextWriter(stream, useBom ? Encoding.UTF8 : new System.Text.UTF8Encoding(false));
-            xmlWriter.Formatting = Formatting.Indented;
+            var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings()
+            {
+                Encoding = useBom ? Encoding.UTF8 : UTF8NoBom,
+                Indent = true
+            });
+            
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteDocType("svg", "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", null);
             
@@ -557,6 +549,5 @@ namespace Svg
                 this.Write(fs, useBom);
             }
         }
-#endif
     }
 }

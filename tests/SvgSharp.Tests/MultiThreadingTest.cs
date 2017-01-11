@@ -1,13 +1,12 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Svg.Exceptions;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Svg.UnitTests
 {
-
-    [TestClass]
+    
     public class MultiThreadingTest : SvgTestHelper
     {
 
@@ -16,32 +15,31 @@ namespace Svg.UnitTests
 
         private void LoadFile()
         {
-            LoadSvg(GetXMLDocFromFile());
+            LoadSvg(TestFile);
         }
 
         
-        [TestMethod]
+        [Fact]
         public void TestSingleThread()
         {
             LoadFile();
         }
 
 
-        [TestMethod]
+        [Fact]
         public void TestMultiThread()
         {
             Parallel.For(0, 10, (x) =>
             {
                 LoadFile();
             });
-            Trace.WriteLine("Done");
         }
 
 
-        [TestMethod]
-        [ExpectedException(typeof(SvgMemoryException))]
+        [Fact]
         public void SVGGivesMemoryExceptionOnTooManyParallelTest()
         {
+            Exception exception = null;
             try
             {
                 Parallel.For(0, 50, (x) =>
@@ -51,8 +49,11 @@ namespace Svg.UnitTests
             }
             catch (AggregateException ex)
             {
-                throw ex.InnerException;
+                exception = ex.InnerException;
             }
+
+            Assert.NotNull(exception);
+            Assert.IsType<SvgMemoryException>(exception);
         }
     }
 }

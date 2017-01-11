@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+//using System.Drawing;
 using System.Collections.Generic;
 
 namespace Svg.FilterEffects
@@ -65,162 +65,163 @@ namespace Svg.FilterEffects
             }
         }
 
-        public Bitmap Apply(Image inputImage)
+        public IImage Apply(IImage inputImage)
         {
-            var bitmapSrc = inputImage as Bitmap;
-            if (bitmapSrc == null) bitmapSrc = new Bitmap(inputImage);
+            throw new NotImplementedException();
+            //var bitmapSrc = inputImage as Bitmap;
+            //if (bitmapSrc == null) bitmapSrc = new Bitmap(inputImage);
 
-            using (RawBitmap src = new RawBitmap(bitmapSrc))
-            {
-                using (RawBitmap dest = new RawBitmap(new Bitmap(inputImage.Width, inputImage.Height)))
-                {
-                    int pixelCount = src.Width * src.Height;
-                    int[] b = new int[pixelCount];
-                    int[] g = new int[pixelCount];
-                    int[] r = new int[pixelCount];
-                    int[] a = new int[pixelCount];
+            //using (RawBitmap src = new RawBitmap(bitmapSrc))
+            //{
+            //    using (RawBitmap dest = new RawBitmap(new Bitmap(inputImage.Width, inputImage.Height)))
+            //    {
+            //        int pixelCount = src.Width * src.Height;
+            //        int[] b = new int[pixelCount];
+            //        int[] g = new int[pixelCount];
+            //        int[] r = new int[pixelCount];
+            //        int[] a = new int[pixelCount];
 
-                    int[] b2 = new int[pixelCount];
-                    int[] g2 = new int[pixelCount];
-                    int[] r2 = new int[pixelCount];
-                    int[] a2 = new int[pixelCount];
+            //        int[] b2 = new int[pixelCount];
+            //        int[] g2 = new int[pixelCount];
+            //        int[] r2 = new int[pixelCount];
+            //        int[] a2 = new int[pixelCount];
 
-                    int ptr = 0;
-                    for (int i = 0; i < pixelCount; i++)
-                    {
-                        b[i] = src.ArgbValues[ptr];
-                        g[i] = src.ArgbValues[++ptr];
-                        r[i] = src.ArgbValues[++ptr];
-                        a[i] = src.ArgbValues[++ptr];
-                        ptr++;
-                    }
+            //        int ptr = 0;
+            //        for (int i = 0; i < pixelCount; i++)
+            //        {
+            //            b[i] = src.ArgbValues[ptr];
+            //            g[i] = src.ArgbValues[++ptr];
+            //            r[i] = src.ArgbValues[++ptr];
+            //            a[i] = src.ArgbValues[++ptr];
+            //            ptr++;
+            //        }
 
-                    int bsum;
-                    int gsum;
-                    int rsum;
-                    int asum;
-                    int read;
+            //        int bsum;
+            //        int gsum;
+            //        int rsum;
+            //        int asum;
+            //        int read;
 
-                    int start = 0;
-                    int index = 0;
-                    if (_blurType != BlurType.VerticalOnly)
-                    {
-                        for (int i = 0; i < pixelCount; i++)
-                        {
-                            bsum = gsum = rsum = asum = 0;
-                            read = (int)(i - _stdDeviation);
-                            for (int z = 0; z < _kernel.Length; z++)
-                            {
-                                if (read < start)
-                                {
-                                    ptr = start;
-                                }
-                                else if (read > start + src.Width - 1)
-                                {
-                                    ptr = start + src.Width - 1;
-                                }
-                                else
-                                {
-                                    ptr = read;
-                                }
-                                bsum += _multable[z, b[ptr]];
-                                gsum += _multable[z, g[ptr]];
-                                rsum += _multable[z, r[ptr]];
-                                asum += _multable[z, a[ptr]];
+            //        int start = 0;
+            //        int index = 0;
+            //        if (_blurType != BlurType.VerticalOnly)
+            //        {
+            //            for (int i = 0; i < pixelCount; i++)
+            //            {
+            //                bsum = gsum = rsum = asum = 0;
+            //                read = (int)(i - _stdDeviation);
+            //                for (int z = 0; z < _kernel.Length; z++)
+            //                {
+            //                    if (read < start)
+            //                    {
+            //                        ptr = start;
+            //                    }
+            //                    else if (read > start + src.Width - 1)
+            //                    {
+            //                        ptr = start + src.Width - 1;
+            //                    }
+            //                    else
+            //                    {
+            //                        ptr = read;
+            //                    }
+            //                    bsum += _multable[z, b[ptr]];
+            //                    gsum += _multable[z, g[ptr]];
+            //                    rsum += _multable[z, r[ptr]];
+            //                    asum += _multable[z, a[ptr]];
 
-                                ++read;
-                            }
-                            b2[i] = (bsum / _kernelSum);
-                            g2[i] = (gsum / _kernelSum);
-                            r2[i] = (rsum / _kernelSum);
-                            a2[i] = (asum / _kernelSum);
+            //                    ++read;
+            //                }
+            //                b2[i] = (bsum / _kernelSum);
+            //                g2[i] = (gsum / _kernelSum);
+            //                r2[i] = (rsum / _kernelSum);
+            //                a2[i] = (asum / _kernelSum);
 
-                            if (_blurType == BlurType.HorizontalOnly)
-                            {
-                                dest.ArgbValues[index] = (byte)(bsum / _kernelSum);
-                                dest.ArgbValues[++index] = (byte)(gsum / _kernelSum);
-                                dest.ArgbValues[++index] = (byte)(rsum / _kernelSum);
-                                dest.ArgbValues[++index] = (byte)(asum / _kernelSum);
-                                index++;
-                            }
+            //                if (_blurType == BlurType.HorizontalOnly)
+            //                {
+            //                    dest.ArgbValues[index] = (byte)(bsum / _kernelSum);
+            //                    dest.ArgbValues[++index] = (byte)(gsum / _kernelSum);
+            //                    dest.ArgbValues[++index] = (byte)(rsum / _kernelSum);
+            //                    dest.ArgbValues[++index] = (byte)(asum / _kernelSum);
+            //                    index++;
+            //                }
 
-                            if (i > 0 && i % src.Width == 0)
-                            {
-                                start += src.Width;
-                            }
-                        }
-                    }
+            //                if (i > 0 && i % src.Width == 0)
+            //                {
+            //                    start += src.Width;
+            //                }
+            //            }
+            //        }
 
-                    if (_blurType == BlurType.HorizontalOnly)
-                    {
-                        return dest.Bitmap;
-                    }
+            //        if (_blurType == BlurType.HorizontalOnly)
+            //        {
+            //            return dest.Bitmap;
+            //        }
 
-                    int tempy;
-                    index = 0;
-                    for (int i = 0; i < src.Height; i++)
-                    {
-                        int y = (int)(i - _stdDeviation);
-                        start = y * src.Width;
-                        for (int j = 0; j < src.Width; j++)
-                        {
-                            bsum = gsum = rsum = asum = 0;
-                            read = start + j;
-                            tempy = y;
-                            for (int z = 0; z < _kernel.Length; z++)
-                            {
-                                if (_blurType == BlurType.VerticalOnly)
-                                {
-                                    if (tempy < 0)
-                                    {
-                                        ptr = j;
-                                    }
-                                    else if (tempy > src.Height - 1)
-                                    {
-                                        ptr = pixelCount - (src.Width - j);
-                                    }
-                                    else
-                                    {
-                                        ptr = read;
-                                    }
-                                    bsum += _multable[z, b[ptr]];
-                                    gsum += _multable[z, g[ptr]];
-                                    rsum += _multable[z, r[ptr]];
-                                    asum += _multable[z, a[ptr]];
-                                }
-                                else
-                                {
-                                    if (tempy < 0)
-                                    {
-                                        ptr = j;
-                                    }
-                                    else if (tempy > src.Height - 1)
-                                    {
-                                        ptr = pixelCount - (src.Width - j);
-                                    }
-                                    else
-                                    {
-                                        ptr = read;
-                                    }
-                                    bsum += _multable[z, b2[ptr]];
-                                    gsum += _multable[z, g2[ptr]];
-                                    rsum += _multable[z, r2[ptr]];
-                                    asum += _multable[z, a2[ptr]];
-                                }
-                                read += src.Width;
-                                ++tempy;
-                            }
+            //        int tempy;
+            //        index = 0;
+            //        for (int i = 0; i < src.Height; i++)
+            //        {
+            //            int y = (int)(i - _stdDeviation);
+            //            start = y * src.Width;
+            //            for (int j = 0; j < src.Width; j++)
+            //            {
+            //                bsum = gsum = rsum = asum = 0;
+            //                read = start + j;
+            //                tempy = y;
+            //                for (int z = 0; z < _kernel.Length; z++)
+            //                {
+            //                    if (_blurType == BlurType.VerticalOnly)
+            //                    {
+            //                        if (tempy < 0)
+            //                        {
+            //                            ptr = j;
+            //                        }
+            //                        else if (tempy > src.Height - 1)
+            //                        {
+            //                            ptr = pixelCount - (src.Width - j);
+            //                        }
+            //                        else
+            //                        {
+            //                            ptr = read;
+            //                        }
+            //                        bsum += _multable[z, b[ptr]];
+            //                        gsum += _multable[z, g[ptr]];
+            //                        rsum += _multable[z, r[ptr]];
+            //                        asum += _multable[z, a[ptr]];
+            //                    }
+            //                    else
+            //                    {
+            //                        if (tempy < 0)
+            //                        {
+            //                            ptr = j;
+            //                        }
+            //                        else if (tempy > src.Height - 1)
+            //                        {
+            //                            ptr = pixelCount - (src.Width - j);
+            //                        }
+            //                        else
+            //                        {
+            //                            ptr = read;
+            //                        }
+            //                        bsum += _multable[z, b2[ptr]];
+            //                        gsum += _multable[z, g2[ptr]];
+            //                        rsum += _multable[z, r2[ptr]];
+            //                        asum += _multable[z, a2[ptr]];
+            //                    }
+            //                    read += src.Width;
+            //                    ++tempy;
+            //                }
 
-                            dest.ArgbValues[index] = (byte)(bsum / _kernelSum);
-                            dest.ArgbValues[++index] = (byte)(gsum / _kernelSum);
-                            dest.ArgbValues[++index] = (byte)(rsum / _kernelSum);
-                            dest.ArgbValues[++index] = (byte)(asum / _kernelSum);
-                            index++;
-                        }
-                    }
-                    return dest.Bitmap;
-                }
-            }
+            //                dest.ArgbValues[index] = (byte)(bsum / _kernelSum);
+            //                dest.ArgbValues[++index] = (byte)(gsum / _kernelSum);
+            //                dest.ArgbValues[++index] = (byte)(rsum / _kernelSum);
+            //                dest.ArgbValues[++index] = (byte)(asum / _kernelSum);
+            //                index++;
+            //            }
+            //        }
+            //        return dest.Bitmap;
+            //    }
+            //}
         }
 
         /// <summary>

@@ -22,8 +22,8 @@
     ]
   },
   "buildOptions": {
-    "allowUnsafe": true,
-    "xmlDoc": true,
+  //  "allowUnsafe": true,
+  //  "xmlDoc": true,
     //"additionalArguments": [ "/additionalfile:../Shared/stylecop.json", "/ruleset:../../ImageSharp.ruleset" ],
     "compile": [
       "../Shared/*.cs"
@@ -38,37 +38,26 @@
     }
   },
   "dependencies": {
-    "StyleCop.Analyzers": {
-      "version": "1.1.0-beta001",
-      "type": "build"
+    //"StyleCop.Analyzers": {
+    //  "version": "1.1.0-beta001",
+    //  "type": "build"
+    //},
+    //we probably need drawing and processing too (formats i'll leave up the the dependent code base.)
+    "SvgSharp": {
+      "target": "project",
+      "version": "0.0.1-*"
     },
-    "System.Buffers": "4.0.0"
+    "ImageSharp": "1.0.0-alpha-000231"
   },
   "frameworks": {
-    "netstandard1.1": {
+    "netstandard1.3": {
       "dependencies": {
-        "System.Collections": "4.0.11",
-        "System.Diagnostics.Debug": "4.0.11",
-        "System.Diagnostics.Tools": "4.0.1",
-        "System.IO": "4.1.0",
-        "System.IO.Compression": "4.1.0",
-        "System.Linq": "4.1.0",
-        "System.ObjectModel": "4.0.12",
-        "System.Resources.ResourceManager": "4.0.1",
-        "System.Runtime.Extensions": "4.1.0",
-        "System.Runtime.InteropServices": "4.1.0",
-        "System.Runtime.Numerics": "4.0.1",
-        "System.Text.Encoding.Extensions": "4.0.11",
-        "System.Threading": "4.0.11",
-        "System.Threading.Tasks": "4.0.11",
-        "System.Threading.Tasks.Parallel": "4.0.1"
+        
       }
     },
-    "net45": {
+    "net46": {
       "dependencies": {
-        "System.Runtime": "4.0.0",
-        "System.IO": "4.0.0",
-        "System.Threading.Tasks.Parallel": "4.0.0"
+        
       }
     }
   }

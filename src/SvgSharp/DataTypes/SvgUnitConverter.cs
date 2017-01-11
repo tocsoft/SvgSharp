@@ -9,100 +9,111 @@ using System.Text.RegularExpressions;
 
 namespace Svg
 {
-    //public sealed class SvgUnitConverter : TypeConverter
-    //{
-    //    public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-    //    {
-    //        if (value == null)
-    //        {
-    //            return new SvgUnit(SvgUnitType.User, 0.0f);
-    //        }
+    public sealed class SvgUnitConverter //: TypeConverter
+    {
+        public SvgUnit ConvertFromInvariantString(string unit)
+        {
+            if (unit == null)
+            {
+                return new SvgUnit(SvgUnitType.User, 0.0f);
+            }
 
-    //        if (!(value is string))
-    //        {
-    //            throw new ArgumentOutOfRangeException("value must be a string.");
-    //        }
+            int identifierIndex = -1;
 
-    //        // http://www.w3.org/TR/CSS21/syndata.html#values
-    //        // http://www.w3.org/TR/SVG11/coords.html#Units
+            if (unit == "none")
+                return SvgUnit.None;
 
-    //        string unit = (string)value;
-    //        int identifierIndex = -1;
+            for (int i = 0; i < unit.Length; i++)
+            {
+                // If the character is a percent sign or a letter which is not an exponent 'e'
+                if (unit[i] == '%' || (char.IsLetter(unit[i]) && !((unit[i] == 'e' || unit[i] == 'E') && i < unit.Length - 1 && !char.IsLetter(unit[i + 1]))))
+                {
+                    identifierIndex = i;
+                    break;
+                }
+            }
 
-    //        if (unit == "none")
-    //            return SvgUnit.None;
+            float val = 0.0f;
+            float.TryParse((identifierIndex > -1) ? unit.Substring(0, identifierIndex) : unit, NumberStyles.Float, CultureInfo.InvariantCulture, out val);
 
-    //        for (int i = 0; i < unit.Length; i++)
-    //        {
-    //            // If the character is a percent sign or a letter which is not an exponent 'e'
-    //            if (unit[i] == '%' || (char.IsLetter(unit[i]) && !((unit[i] == 'e' || unit[i] == 'E') && i < unit.Length - 1 && !char.IsLetter(unit[i + 1]))))
-    //            {
-    //                identifierIndex = i;
-    //                break;
-    //            }
-    //        }
+            if (identifierIndex == -1)
+            {
+                return new SvgUnit(val);
+            }
 
-    //        float val = 0.0f;
-    //        float.TryParse((identifierIndex > -1) ? unit.Substring(0, identifierIndex) : unit, NumberStyles.Float, CultureInfo.InvariantCulture, out val);
+            switch (unit.Substring(identifierIndex).Trim().ToLower())
+            {
+                case "mm":
+                    return new SvgUnit(SvgUnitType.Millimeter, val);
+                case "cm":
+                    return new SvgUnit(SvgUnitType.Centimeter, val);
+                case "in":
+                    return new SvgUnit(SvgUnitType.Inch, val);
+                case "px":
+                    return new SvgUnit(SvgUnitType.Pixel, val);
+                case "pt":
+                    return new SvgUnit(SvgUnitType.Point, val);
+                case "pc":
+                    return new SvgUnit(SvgUnitType.Pica, val);
+                case "%":
+                    return new SvgUnit(SvgUnitType.Percentage, val);
+                case "em":
+                    return new SvgUnit(SvgUnitType.Em, val);
+                case "ex":
+                    return new SvgUnit(SvgUnitType.Ex, val);
+                default:
+                    throw new FormatException("Unit is in an invalid format '" + unit + "'.");
+            }
+        }
 
-    //        if (identifierIndex == -1)
-    //        {
-    //            return new SvgUnit(val);
-    //        }
+        //public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        //{
+        //    if (value == null)
+        //    {
+        //        return new SvgUnit(SvgUnitType.User, 0.0f);
+        //    }
 
-    //        switch (unit.Substring(identifierIndex).Trim().ToLower())
-    //        {
-    //            case "mm":
-    //                return new SvgUnit(SvgUnitType.Millimeter, val);
-    //            case "cm":
-    //                return new SvgUnit(SvgUnitType.Centimeter, val);
-    //            case "in":
-    //                return new SvgUnit(SvgUnitType.Inch, val);
-    //            case "px":
-    //                return new SvgUnit(SvgUnitType.Pixel, val);
-    //            case "pt":
-    //                return new SvgUnit(SvgUnitType.Point, val);
-    //            case "pc":
-    //                return new SvgUnit(SvgUnitType.Pica, val);
-    //            case "%":
-    //                return new SvgUnit(SvgUnitType.Percentage, val);
-    //            case "em":
-    //                return new SvgUnit(SvgUnitType.Em, val);
-    //            case "ex":
-    //                return new SvgUnit(SvgUnitType.Ex, val);
-    //            default:
-    //                throw new FormatException("Unit is in an invalid format '" + unit + "'.");
-    //        }
-    //    }
+        //    if (!(value is string))
+        //    {
+        //        throw new ArgumentOutOfRangeException("value must be a string.");
+        //    }
 
-    //    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-    //    {
-    //        if (sourceType == typeof(string))
-    //        {
-    //            return true;
-    //        }
+        //    // http://www.w3.org/TR/CSS21/syndata.html#values
+        //    // http://www.w3.org/TR/SVG11/coords.html#Units
 
-    //        return base.CanConvertFrom(context, sourceType);
-    //    }
+        //    string unit = (string)value;
+        //    return ConvertFromInvariantString(unit);
 
-    //    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-    //    {
-    //        if (destinationType == typeof(string))
-    //        {
-    //            return true;
-    //        }
+        //}
 
-    //        return base.CanConvertTo(context, destinationType);
-    //    }
+        //public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        //{
+        //    if (sourceType == typeof(string))
+        //    {
+        //        return true;
+        //    }
 
-    //    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-    //    {
-    //        if (destinationType == typeof(string))
-    //        {
-    //            return ((SvgUnit)value).ToString();
-    //        }
+        //    return base.CanConvertFrom(context, sourceType);
+        //}
 
-    //        return base.ConvertTo(context, culture, value, destinationType);
-    //    }
-    //}
+        //public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        //{
+        //    if (destinationType == typeof(string))
+        //    {
+        //        return true;
+        //    }
+
+        //    return base.CanConvertTo(context, destinationType);
+        //}
+
+        //public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        //{
+        //    if (destinationType == typeof(string))
+        //    {
+        //        return ((SvgUnit)value).ToString();
+        //    }
+
+        //    return base.ConvertTo(context, culture, value, destinationType);
+        //}
+    }
 }
