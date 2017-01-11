@@ -108,12 +108,12 @@ namespace Svg
             {
                 if (string.IsNullOrEmpty(this._elementName))
                 {
-                    //var attr = TypeDescriptor.GetAttributes(this).OfType<SvgElementAttribute>().SingleOrDefault();
+                    var attr = this.GetType().GetTypeInfo().GetCustomAttribute<SvgElementAttribute>(true);
 
-                    //if (attr != null)
-                    //{
-                    //    this._elementName = attr.ElementName;
-                    //}
+                    if (attr != null)
+                    {
+                        this._elementName = attr.ElementName;
+                    }
                 }
 
                 return this._elementName;
@@ -530,13 +530,12 @@ namespace Svg
 
         protected virtual void WriteStartElement(XmlWriter writer)
         {
-            throw new NotImplementedException();
-        //    if (this.ElementName != String.Empty)
-        //    {
-        //        writer.WriteStartElement(this.ElementName);
-        //    }
+             if (this.ElementName != String.Empty)
+            {
+                writer.WriteStartElement(this.ElementName);
+            }
 
-        //    this.WriteAttributes(writer);
+            this.WriteAttributes(writer);
         }
 
         protected virtual void WriteEndElement(XmlWriter writer)

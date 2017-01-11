@@ -200,7 +200,7 @@ namespace Svg
             SvgElement element = null;
             SvgElement parent;
             SvgDocument svgDocument = null;
-			var elementFactory = new SvgElementFactory();
+            var elementFactory = new SvgElementFactory();
 
             var styles = new List<ISvgNode>();
 
@@ -382,27 +382,27 @@ namespace Svg
             this.Render(renderer);
         }
 
-	    /// <summary>
-	    /// Renders the <see cref="SvgDocument"/> and returns the image as a <see cref="Bitmap"/>.
-	    /// </summary>
-	    /// <returns>A <see cref="Bitmap"/> containing the rendered document.</returns>
-	    public virtual Bitmap Draw()
-	    {
-		    //Trace.TraceInformation("Begin Render");
+        /// <summary>
+        /// Renders the <see cref="SvgDocument"/> and returns the image as a <see cref="Bitmap"/>.
+        /// </summary>
+        /// <returns>A <see cref="Bitmap"/> containing the rendered document.</returns>
+        public virtual Bitmap Draw()
+        {
+            //Trace.TraceInformation("Begin Render");
 
-		    var size = GetDimensions();
-		    Bitmap bitmap = null;
-		    try
-		    {
-			    bitmap = new Bitmap((int) Math.Round(size.Width), (int) Math.Round(size.Height));
-		    }
-		    catch (ArgumentException e)
-		    {
-				//When processing too many files at one the system can run out of memory
-			    throw new SvgMemoryException("Cannot process SVG file, cannot allocate the required memory", e);
-		    }
+            var size = GetDimensions();
+            Bitmap bitmap = null;
+            try
+            {
+                bitmap = new Bitmap((int) Math.Round(size.Width), (int) Math.Round(size.Height));
+            }
+            catch (ArgumentException e)
+            {
+                //When processing too many files at one the system can run out of memory
+                throw new SvgMemoryException("Cannot process SVG file, cannot allocate the required memory", e);
+            }
 
-	    // 	bitmap.SetResolution(300, 300);
+        // 	bitmap.SetResolution(300, 300);
             try
             {
                 Draw(bitmap);
@@ -426,22 +426,22 @@ namespace Svg
 
             try
             {
-				using (var renderer = SvgRenderer.FromImage(bitmap))
-				{
-					renderer.SetBoundable(new GenericBoundable(0, 0, bitmap.Width, bitmap.Height));
+                using (var renderer = SvgRenderer.FromImage(bitmap))
+                {
+                    renderer.SetBoundable(new GenericBoundable(0, 0, bitmap.Width, bitmap.Height));
 
-					//EO, 2014-12-05: Requested to ensure proper zooming (draw the svg in the bitmap size, ==> proper scaling)
-					//EO, 2015-01-09, Added GetDimensions to use its returned size instead of this.Width and this.Height (request of Icarrere).
+                    //EO, 2014-12-05: Requested to ensure proper zooming (draw the svg in the bitmap size, ==> proper scaling)
+                    //EO, 2015-01-09, Added GetDimensions to use its returned size instead of this.Width and this.Height (request of Icarrere).
                     //BBN, 2015-07-29, it is unnecassary to call again GetDimensions and transform to 1x1
                     //JA, 2015-12-18, this is actually necessary to correctly render the Draw(rasterHeight, rasterWidth) overload, otherwise the rendered graphic doesn't scale correctly
                     SizeF size = this.GetDimensions();
-					renderer.ScaleTransform(bitmap.Width / size.Width, bitmap.Height / size.Height);
+                    renderer.ScaleTransform(bitmap.Width / size.Width, bitmap.Height / size.Height);
 
-					//EO, 2014-12-05: Requested to ensure proper zooming out (reduce size). Otherwise it clip the image.
-					this.Overflow = SvgOverflow.Auto;
+                    //EO, 2014-12-05: Requested to ensure proper zooming out (reduce size). Otherwise it clip the image.
+                    this.Overflow = SvgOverflow.Auto;
 
-					this.Render(renderer);
-				}
+                    this.Render(renderer);
+                }
             }
             catch
             {

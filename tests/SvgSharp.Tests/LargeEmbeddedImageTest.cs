@@ -22,6 +22,7 @@ namespace Svg.UnitTests
         protected override int ExpectedSize { get { return 160000; } } 
 
         [Fact]
+        
         public void TestImageIsRendered()
         {
             LoadSvg(TestResource);

@@ -41,7 +41,10 @@ namespace Svg.UnitTests
             var memoryStream = new MemoryStream();
             svgDocument.Write(memoryStream);
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
+            memoryStream.Position = 0;
+            var sr = new StreamReader(memoryStream);
+            var xml = sr.ReadToEnd();
+            memoryStream.Position = 0;
 
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(memoryStream);

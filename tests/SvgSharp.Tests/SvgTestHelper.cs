@@ -127,7 +127,8 @@ namespace Svg.UnitTests
             }
 
             var dir = new[] {
-                "TestImages"
+                "TestImages",
+                "..\\..\\..\\..\\TestImages"
 
             }.Where(x => Directory.Exists(x)).FirstOrDefault();
 
