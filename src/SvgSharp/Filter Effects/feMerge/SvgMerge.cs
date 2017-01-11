@@ -12,10 +12,9 @@ namespace Svg.FilterEffects
 	[SvgElement("feMerge")]
     public class SvgMerge : SvgFilterPrimitive
     {
-        public override void Process(DrawableBuffer buffer)
+        public override void Process(ImageBuffer buffer)
         {
             throw new NotImplementedException();
-
             //var children = this.Children.OfType<SvgMergeNode>().ToList();
             //var inputImage = buffer[children.First().Input];
             //var result = new Bitmap(inputImage.Width, inputImage.Height);
@@ -28,7 +27,7 @@ namespace Svg.FilterEffects
             //    }
             //    g.Flush();
             //}
-            //result.Save(@"C:\test.png");
+
             //buffer[this.Result] = result;
         }
 

@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//using System.Drawing;
-//using System.Drawing.Imaging;
-//using System.Drawing.Drawing2D;
 
 namespace Svg.FilterEffects
 {
-    public interface IDrawable
-    {
-    }
-
-    public class DrawableBuffer : IDictionary<string, IDrawable>
+    public class ImageBuffer : IDictionary<string, IImage>
     {
         private const string BufferKey = "__!!BUFFER";
 
-        private Dictionary<string, IDrawable> _images;
+        private Dictionary<string, IImage> _images;
         private RectangleF _bounds;
         private ISvgRenderer _renderer;
         private Action<ISvgRenderer> _renderMethod;
@@ -24,7 +17,7 @@ namespace Svg.FilterEffects
 
         public Matrix Transform { get; set; }
 
-        public IDrawable Buffer
+        public IImage Buffer
         {
             get { return _images[BufferKey]; }
         }
@@ -32,7 +25,7 @@ namespace Svg.FilterEffects
         {
             get { return _images.Count; }
         }
-        public IDrawable this[string key]
+        public IImage this[string key]
         {
             get
             {
@@ -45,13 +38,13 @@ namespace Svg.FilterEffects
             }
         }
 
-        public DrawableBuffer(RectangleF bounds, float inflate, ISvgRenderer renderer, Action<ISvgRenderer> renderMethod)
+        public ImageBuffer(RectangleF bounds, float inflate, ISvgRenderer renderer, Action<ISvgRenderer> renderMethod)
         {
             _bounds = bounds;
             _inflate = inflate;
             _renderer = renderer;
             _renderMethod = renderMethod;
-            _images = new Dictionary<string, IDrawable>();
+            _images = new Dictionary<string, IImage>();
             _images[SvgFilterPrimitive.BackgroundAlpha] = null;
             _images[SvgFilterPrimitive.BackgroundImage] = null;
             _images[SvgFilterPrimitive.FillPaint] = null;
@@ -60,7 +53,7 @@ namespace Svg.FilterEffects
             _images[SvgFilterPrimitive.StrokePaint] = null;
         }
 
-        public void Add(string key, IDrawable value)
+        public void Add(string key, IImage value)
         {
             _images.Add(ProcessKey(key), value);
         }
@@ -72,7 +65,7 @@ namespace Svg.FilterEffects
         {
             _images.Clear();
         }
-        public IEnumerator<KeyValuePair<string, IDrawable>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, IImage>> GetEnumerator()
         {
             return _images.GetEnumerator();
         }
@@ -91,7 +84,7 @@ namespace Svg.FilterEffects
                     return _images.Remove(ProcessKey(key));
             }
         }
-        public bool TryGetValue(string key, out IDrawable value)
+        public bool TryGetValue(string key, out IImage value)
         {
             if (_images.TryGetValue(ProcessKey(key), out value))
             {
@@ -104,7 +97,7 @@ namespace Svg.FilterEffects
             }
         }
 
-        private IDrawable ProcessResult(string key, IDrawable curr)
+        private IImage ProcessResult(string key, IImage curr)
         {
             if (curr == null)
             {
@@ -134,10 +127,9 @@ namespace Svg.FilterEffects
 
 
 
-        private IDrawable CreateSourceGraphic()
+        private IImage CreateSourceGraphic()
         {
             throw new NotImplementedException();
-
             //var graphic = new Bitmap((int)(_bounds.Width + 2 * _inflate * _bounds.Width + _bounds.X),
             //                         (int)(_bounds.Height + 2 * _inflate * _bounds.Height + _bounds.Y));
             //using (var renderer = SvgRenderer.FromImage(graphic))
@@ -153,11 +145,10 @@ namespace Svg.FilterEffects
             //return graphic;
         }
 
-        private IDrawable CreateSourceAlpha()
+        private IImage CreateSourceAlpha()
         {
             throw new NotImplementedException();
-
-            //IDrawable source = this[SvgFilterPrimitive.SourceGraphic];
+            //IImage source = this[SvgFilterPrimitive.SourceGraphic];
 
             //float[][] colorMatrixElements = {
             //       new float[] {0, 0, 0, 0, 0},        // red
@@ -186,32 +177,32 @@ namespace Svg.FilterEffects
 
 
 
-        bool ICollection<KeyValuePair<string, IDrawable>>.IsReadOnly
+        bool ICollection<KeyValuePair<string, IImage>>.IsReadOnly
         {
             get { return false; }
         }
-        ICollection<string> IDictionary<string, IDrawable>.Keys
+        ICollection<string> IDictionary<string, IImage>.Keys
         {
             get { return _images.Keys; }
         }
-        ICollection<IDrawable> IDictionary<string, IDrawable>.Values
+        ICollection<IImage> IDictionary<string, IImage>.Values
         {
             get { return _images.Values; }
         }
 
-        void ICollection<KeyValuePair<string, IDrawable>>.Add(KeyValuePair<string, IDrawable> item)
+        void ICollection<KeyValuePair<string, IImage>>.Add(KeyValuePair<string, IImage> item)
         {
             _images.Add(item.Key, item.Value);
         }
-        bool ICollection<KeyValuePair<string, IDrawable>>.Contains(KeyValuePair<string, IDrawable> item)
+        bool ICollection<KeyValuePair<string, IImage>>.Contains(KeyValuePair<string, IImage> item)
         {
-            return ((IDictionary<string, IDrawable>)_images).Contains(item);
+            return ((IDictionary<string, IImage>)_images).Contains(item);
         }
-        void ICollection<KeyValuePair<string, IDrawable>>.CopyTo(KeyValuePair<string, IDrawable>[] array, int arrayIndex)
+        void ICollection<KeyValuePair<string, IImage>>.CopyTo(KeyValuePair<string, IImage>[] array, int arrayIndex)
         {
-            ((IDictionary<string, IDrawable>)_images).CopyTo(array, arrayIndex);
+            ((IDictionary<string, IImage>)_images).CopyTo(array, arrayIndex);
         }
-        bool ICollection<KeyValuePair<string, IDrawable>>.Remove(KeyValuePair<string, IDrawable> item)
+        bool ICollection<KeyValuePair<string, IImage>>.Remove(KeyValuePair<string, IImage> item)
         {
             return _images.Remove(item.Key);
         }

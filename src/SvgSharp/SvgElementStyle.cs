@@ -7,6 +7,7 @@ using System.ComponentModel;
 using Svg.DataTypes;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Svg
 {
@@ -275,8 +276,7 @@ namespace Svg
                                 sizes = part.Split('/');
                                 try
                                 {
-                                    throw new NotImplementedException();
-                                    //fontSize = (SvgUnit)(new SvgUnitConverter().ConvertFromInvariantString(sizes[0]));
+                                    fontSize = new SvgUnitConverter().ConvertFromInvariantString(sizes[0]);
                                     success = true;
                                     this.FontSize = fontSize;
                                 }
@@ -308,7 +308,7 @@ namespace Svg
                 this.IsPathDirty = true;
             }
         }
-        
+
         /// <summary>
         /// Get the font information based on data stored with the text object or inherited from the parent.
         /// </summary>
@@ -390,7 +390,8 @@ namespace Svg
             }
         }
 
-        //public static System.Drawing.Text.PrivateFontCollection PrivateFonts = new System.Drawing.Text.PrivateFontCollection();
+        public static IEnumerable<IFont> PrivateFonts { get; } = new List<IFont>();
+
         public static object ValidateFontFamily(string fontFamilyList, SvgDocument doc)
         {
             throw new NotImplementedException();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Svg
 {
@@ -50,15 +51,15 @@ namespace Svg
                 switch (fullUri.Scheme.ToLowerInvariant())
                 {
                     case "file":
-                        throw new NotImplementedException();
-                        doc = SvgDocument.Open<SvgDocument>(fullUri.LocalPath.Substring(0, fullUri.LocalPath.Length - hash.Length));
-                        //return doc.IdManager.GetElementById(hash);
+                        doc = SvgDocument.Open(fullUri.LocalPath.Substring(0, fullUri.LocalPath.Length - hash.Length));
+                        return doc.IdManager.GetElementById(hash);
                     case "http":
                     case "https":
                         var httpRequest = WebRequest.Create(uri);
-                        using (WebResponse webResponse = httpRequest.GetResponse())
+                        //TODO make this be some form of async preload step (loading all external reference before we try to use them)
+                        using (WebResponse webResponse = httpRequest.GetResponseAsync().GetAwaiter().GetResult())
                         {
-                            doc = SvgDocument.Open<SvgDocument>(webResponse.GetResponseStream());
+                            doc = SvgDocument.Open(webResponse.GetResponseStream());
                             return doc.IdManager.GetElementById(hash);
                         }
                     default:

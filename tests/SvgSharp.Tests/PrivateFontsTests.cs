@@ -1,6 +1,6 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
 using System;
-//using System.Drawing.Text;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -16,11 +16,10 @@ namespace Svg.UnitTests
     ///   - Issue204_PrivateFont\Text.svg
     ///   - Issue204_PrivateFont\BrushScriptMT2.ttf
     /// </remarks>
-    //[TestClass]
     public class PrivateFontsTests : SvgTestHelper
     {
-        private const string PrivateFontSvg = "Issue204_PrivateFont.Text.svg";
-        private const string PrivateFont = "Issue204_PrivateFont.BrushScriptMT2.ttf";
+        private const string PrivateFontSvg = "Issue204_PrivateFont\\Text.svg";
+        private const string PrivateFont = "Issue204_PrivateFont\\BrushScriptMT2.ttf";
         //private const string PrivateFontName = "Brush Script MT2";
 
         protected override int ExpectedSize { get { return 3200; } } //3512
@@ -29,19 +28,20 @@ namespace Svg.UnitTests
         [Fact]
         public void TestPrivateFont()
         {
-            throw new NotImplementedException();
-            //AddFontFromResource(SvgElement.PrivateFonts, GetFullResourceString(PrivateFont));
-            //LoadSvg(GetXMLDocFromResource(GetFullResourceString(PrivateFontSvg)));
+            AddFontFromResource(SvgElement.PrivateFonts, GetFullResourceString(PrivateFont));
+            LoadSvg(PrivateFontSvg);
         }
 
 
-        //private void AddFontFromResource(PrivateFontCollection privateFontCollection, string fullFontResourceString)
-        //{
-        //    var fontBytes = GetResourceBytes(fullFontResourceString);
-        //    var fontData = Marshal.AllocCoTaskMem(fontBytes.Length);
-        //    Marshal.Copy(fontBytes, 0, fontData, fontBytes.Length);
-        //    privateFontCollection.AddMemoryFont(fontData, fontBytes.Length); // Add font to collection.
-        //    Marshal.FreeCoTaskMem(fontData); // Do not forget to frees the memory block.
-        //}
+        private void AddFontFromResource(IEnumerable<IFont> privateFontCollection, string fullFontResourceString)
+        {
+            throw new NotImplementedException();
+
+            //var fontBytes = GetResourceBytes(fullFontResourceString);
+            //var fontData = Marshal.AllocCoTaskMem(fontBytes.Length);
+            //Marshal.Copy(fontBytes, 0, fontData, fontBytes.Length);
+            //privateFontCollection.AddMemoryFont(fontData, fontBytes.Length); // Add font to collection.
+            //Marshal.FreeCoTaskMem(fontData); // Do not forget to frees the memory block.
+        }
     }
 }

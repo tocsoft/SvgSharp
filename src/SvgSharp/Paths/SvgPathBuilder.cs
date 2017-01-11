@@ -49,8 +49,11 @@ namespace Svg
                     CreatePathSegment(command, segments, new CoordinateParser(commandSet.Trim()), isRelative);
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
+#if DEBUG
+                throw;
+#endif
                 //Trace.TraceError("Error parsing path \"{0}\": {1}", path, exc.Message);
             }
 

@@ -1,9 +1,8 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
 using Xunit;
 
 namespace Svg.UnitTests {
 
-    //[TestClass]
     public class SvgPointCollectionTests 
     {
 

@@ -22,8 +22,8 @@
     ]
   },
   "buildOptions": {
-    "allowUnsafe": true,
-    "xmlDoc": true,
+    //"allowUnsafe": true,
+    //"xmlDoc": true,
     //"additionalArguments": [ "/additionalfile:../Shared/stylecop.json", "/ruleset:../../ImageSharp.ruleset" ],
     "compile": [
       "../Shared/*.cs"
@@ -38,19 +38,20 @@
     }
   },
   "dependencies": {
-    "StyleCop.Analyzers": {
-      "version": "1.1.0-beta001",
-      "type": "build"
-    },
-    "System.Buffers": "4.0.0"
+    //"StyleCop.Analyzers": {
+    //  "version": "1.1.0-beta001",
+    //  "type": "build"
+    //},
+    "SvgSharp": {
+      "target": "project",
+      "version": "0.0.1-*"
+    }
   },
   "frameworks": {
     "net46": {
       "dependencies": {
-        "System.Runtime": "4.0.0",
-        "System.IO": "4.0.0",
-        "System.Threading.Tasks.Parallel": "4.0.0"
-      }
+      },
+      "frameworkAssemblies": {"System.Drawing": "4.0.0.0" }
     }
   }
 }

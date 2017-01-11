@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 //using System.Drawing;
 //using System.Drawing.Drawing2D;
 using Svg.Transforms;
@@ -13,7 +14,7 @@ namespace Svg
     [SvgElement("clipPath")]
     public sealed class SvgClipPath : SvgElement
     {
-        private bool _pathDirty = true;
+        //private bool _pathDirty = true;
 
         /// <summary>
         /// Specifies the coordinate system for the clipping path.
@@ -106,7 +107,7 @@ namespace Svg
         protected override void AddElement(SvgElement child, int index)
         {
             base.AddElement(child, index);
-            this._pathDirty = true;
+            //this._pathDirty = true;
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace Svg
         protected override void RemoveElement(SvgElement child)
         {
             base.RemoveElement(child);
-            this._pathDirty = true;
+            //this._pathDirty = true;
         }
 
         /// <summary>

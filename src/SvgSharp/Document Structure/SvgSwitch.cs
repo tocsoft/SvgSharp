@@ -1,4 +1,6 @@
 
+using System.Threading.Tasks;
+
 namespace Svg
 {
     /// <summary>
@@ -62,7 +64,9 @@ namespace Svg
         protected override void Render(ISvgRenderer renderer)
         {
             if (!Visible || !Displayable)
+            {
                 return;
+            }
 
             this.PushTransforms(renderer);
             this.SetClip(renderer);

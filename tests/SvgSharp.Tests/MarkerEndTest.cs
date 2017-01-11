@@ -1,8 +1,6 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Svg.DataTypes;
+﻿using Svg.DataTypes;
 using System;
 using System.Diagnostics;
-//using System.Drawing;
 using System.IO;
 using Xunit;
 
@@ -17,18 +15,17 @@ namespace Svg.UnitTests
     /// Test use the following embedded resources:
     ///   - Issue212_MakerEnd\OperatingPlan.svg
     /// </remarks>
-    /// 
     public class MarkerEndTest : SvgTestHelper
     {
 
-        protected override string TestResource { get { return GetFullResourceString("Issue212_MakerEnd.OperatingPlan.svg"); } }
+        protected override string TestResource { get { return GetFullResourceString("Issue212_MakerEnd\\OperatingPlan.svg"); } }
         protected override int ExpectedSize { get { return 5000; } } //5321 //5410
 
 
         [Fact]
         public void TestOperatingPlanRendering()
         {
-            LoadSvg(GetXMLDocFromResource());
+            LoadSvg(TestResource);
         }
 
 

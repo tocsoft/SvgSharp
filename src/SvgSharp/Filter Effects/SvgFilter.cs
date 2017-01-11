@@ -6,6 +6,7 @@ using System.Text;
 //using System.Drawing.Imaging;
 //using System.Drawing.Drawing2D;
 using Svg.DataTypes;
+using System.Threading.Tasks;
 
 namespace Svg.FilterEffects
 {
@@ -15,8 +16,8 @@ namespace Svg.FilterEffects
     [SvgElement("filter")]
     public sealed class SvgFilter : SvgElement
     {
-    //    private Bitmap sourceGraphic;
-    //    private Bitmap sourceAlpha;
+        //private Bitmap sourceGraphic;
+        //private Bitmap sourceAlpha;
 
 	
 		/// <summary>
@@ -112,7 +113,6 @@ namespace Svg.FilterEffects
         private RectangleF GetPathBounds(SvgVisualElement element, ISvgRenderer renderer, Matrix transform)
         {
             throw new NotImplementedException();
-
             //var bounds = element.Path(renderer).GetBounds();
             //var pts = new PointF[] { bounds.Location, new PointF(bounds.Right, bounds.Bottom) };
             //transform.TransformPoints(pts);
@@ -158,7 +158,6 @@ namespace Svg.FilterEffects
 
         private void ResetDefaults()
         {
-            throw new NotImplementedException();
             //if (this.sourceGraphic != null)
             //{
             //    this.sourceGraphic.Dispose();

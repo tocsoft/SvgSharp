@@ -65,10 +65,9 @@ namespace Svg.FilterEffects
             }
         }
 
-        public IDrawable Apply(IDrawable inputImage)
+        public IImage Apply(IImage inputImage)
         {
             throw new NotImplementedException();
-
             //var bitmapSrc = inputImage as Bitmap;
             //if (bitmapSrc == null) bitmapSrc = new Bitmap(inputImage);
 
@@ -221,60 +220,60 @@ namespace Svg.FilterEffects
             //            }
             //        }
             //        return dest.Bitmap;
+            //    }
             //}
-        //}
-    }
+        }
 
-    /// <summary>
-    /// Gets or sets the radius of the blur (only allows for one value - not the two specified in the SVG Spec)
-    /// </summary>
-    [SvgAttribute("stdDeviation")]
-    public float StdDeviation
-    {
-        get { return _stdDeviation; }
-        set
+        /// <summary>
+        /// Gets or sets the radius of the blur (only allows for one value - not the two specified in the SVG Spec)
+        /// </summary>
+        [SvgAttribute("stdDeviation")]
+        public float StdDeviation
         {
-            if (value <= 0)
+            get { return _stdDeviation; }
+            set
             {
-                throw new InvalidOperationException("Radius must be greater then 0");
+                if (value <= 0)
+                {
+                    throw new InvalidOperationException("Radius must be greater then 0");
+                }
+                _stdDeviation = value;
+                PreCalculate();
             }
-            _stdDeviation = value;
-            PreCalculate();
         }
-    }
 
 
-    public BlurType BlurType
-    {
-        get { return _blurType; }
-        set
+        public BlurType BlurType
         {
-            _blurType = value;
+            get { return _blurType; }
+            set
+            {
+                _blurType = value;
+            }
+        }
+
+
+
+        public override void Process(ImageBuffer buffer)
+        {
+            var inputImage = buffer[this.Input];
+            var result = Apply(inputImage);
+            buffer[this.Result] = result;
+        }
+
+
+
+        public override SvgElement DeepCopy()
+        {
+            return DeepCopy<SvgGaussianBlur>();
+        }
+
+        public override SvgElement DeepCopy<T>()
+        {
+            var newObj = base.DeepCopy<T>() as SvgGaussianBlur;
+            newObj.StdDeviation = this.StdDeviation;
+            newObj.BlurType = this.BlurType;
+            return newObj;
         }
     }
-
-
-
-    public override void Process(DrawableBuffer buffer)
-    {
-        var inputImage = buffer[this.Input];
-        var result = Apply(inputImage);
-        buffer[this.Result] = result;
-    }
-
-
-
-    public override SvgElement DeepCopy()
-    {
-        return DeepCopy<SvgGaussianBlur>();
-    }
-
-    public override SvgElement DeepCopy<T>()
-    {
-        var newObj = base.DeepCopy<T>() as SvgGaussianBlur;
-        newObj.StdDeviation = this.StdDeviation;
-        newObj.BlurType = this.BlurType;
-        return newObj;
-    }
-}
 }

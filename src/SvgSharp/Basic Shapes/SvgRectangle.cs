@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 //using System.Drawing;
 //using System.Drawing.Drawing2D;
 using Svg.Transforms;
@@ -46,16 +47,16 @@ namespace Svg
         [SvgAttribute("x")]
         public SvgUnit X
         {
-        	get { return _x; }
-        	set
-        	{
-        		if(_x != value)
-        		{
-        			_x = value;
-        			OnAttributeChanged(new AttributeEventArgs{ Attribute = "x", Value = value });
-        			IsPathDirty = true;
-        		}
-        	}
+            get { return _x; }
+            set
+            {
+                if (_x != value)
+                {
+                    _x = value;
+                    OnAttributeChanged(new AttributeEventArgs { Attribute = "x", Value = value });
+                    IsPathDirty = true;
+                }
+            }
         }
 
         /// <summary>
@@ -64,16 +65,16 @@ namespace Svg
         [SvgAttribute("y")]
         public SvgUnit Y
         {
-        	get { return _y; }
-        	set
-        	{
-        		if(_y != value)
-        		{
-        			_y = value;
-        			OnAttributeChanged(new AttributeEventArgs{ Attribute = "y", Value = value });
-        			IsPathDirty = true;
-        		}
-        	}
+            get { return _y; }
+            set
+            {
+                if (_y != value)
+                {
+                    _y = value;
+                    OnAttributeChanged(new AttributeEventArgs { Attribute = "y", Value = value });
+                    IsPathDirty = true;
+                }
+            }
         }
 
         /// <summary>
@@ -82,16 +83,16 @@ namespace Svg
         [SvgAttribute("width")]
         public SvgUnit Width
         {
-        	get { return _width; }
-        	set
-        	{
-        		if(_width != value)
-        		{
-        			_width = value;
-        			OnAttributeChanged(new AttributeEventArgs{ Attribute = "width", Value = value });
-        			IsPathDirty = true;
-        		}
-        	}
+            get { return _width; }
+            set
+            {
+                if (_width != value)
+                {
+                    _width = value;
+                    OnAttributeChanged(new AttributeEventArgs { Attribute = "width", Value = value });
+                    IsPathDirty = true;
+                }
+            }
         }
 
         /// <summary>
@@ -100,16 +101,16 @@ namespace Svg
         [SvgAttribute("height")]
         public SvgUnit Height
         {
-        	get { return _height; }
-        	set
-        	{
-        		if(_height != value)
-        		{
-        			_height = value;
-        			OnAttributeChanged(new AttributeEventArgs{ Attribute = "height", Value = value });
-        			IsPathDirty = true;
-        		}
-        	}
+            get { return _height; }
+            set
+            {
+                if (_height != value)
+                {
+                    _height = value;
+                    OnAttributeChanged(new AttributeEventArgs { Attribute = "height", Value = value });
+                    IsPathDirty = true;
+                }
+            }
         }
 
         /// <summary>
@@ -174,9 +175,10 @@ namespace Svg
         /// <value>The bounds.</value>
         public override RectangleF Bounds
         {
-            get {
+            get
+            {
                 throw new NotImplementedException();
-            //    return Path(null).GetBounds();
+                //    return Path(null).GetBounds();
             }
         }
 
@@ -204,7 +206,7 @@ namespace Svg
 
         //          var width = this.Width.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this) + halfStrokeWidth;
         //          var height = this.Height.ToDeviceValue(renderer, UnitRenderingType.Vertical, this) + halfStrokeWidth;
-                  
+
         //          var rectangle = new RectangleF(strokedLocation.ToDeviceValue(renderer, this), new SizeF(width, height));
 
         //            _path = new GraphicsPath();
@@ -292,21 +294,21 @@ namespace Svg
         }
 
 
-		public override SvgElement DeepCopy()
-		{
-			return DeepCopy<SvgRectangle>();
-		}
+        public override SvgElement DeepCopy()
+        {
+            return DeepCopy<SvgRectangle>();
+        }
 
-		public override SvgElement DeepCopy<T>()
-		{
- 			var newObj = base.DeepCopy<T>() as SvgRectangle;
-			newObj.CornerRadiusX = this.CornerRadiusX;
-			newObj.CornerRadiusY = this.CornerRadiusY;
-			newObj.Height = this.Height;
-			newObj.Width = this.Width;
-			newObj.X = this.X;
-			newObj.Y = this.Y;
-			return newObj;
-		}
+        public override SvgElement DeepCopy<T>()
+        {
+            var newObj = base.DeepCopy<T>() as SvgRectangle;
+            newObj.CornerRadiusX = this.CornerRadiusX;
+            newObj.CornerRadiusY = this.CornerRadiusY;
+            newObj.Height = this.Height;
+            newObj.Width = this.Width;
+            newObj.X = this.X;
+            newObj.Y = this.Y;
+            return newObj;
+        }
     }
 }
