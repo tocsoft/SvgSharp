@@ -13,12 +13,10 @@ namespace Svg.UnitTests
     /// <seealso cref="Svg.UnitTests.SvgTestHelper" />
     public class SvgTextElementDeepCopyTest : SvgTestHelper
     {
-        private const string PureTextElementSvg = "Issue_TextElement\\Text.svg";
-        
         [Fact]
         public void TestSvgTextElementDeepCopy()
         {
-            var svgDocument = OpenSvg(PureTextElementSvg);
+            var svgDocument = Svg.SvgDocument.Open(FixPath("Issue_TextElement\\Text.svg"));
             CheckDocument(svgDocument);
 
             var deepCopy = (SvgDocument)svgDocument.DeepCopy<SvgDocument>();
@@ -46,7 +44,10 @@ namespace Svg.UnitTests
             var xml = sr.ReadToEnd();
             memoryStream.Position = 0;
 
-            var xmlDocument = new XmlDocument();
+            var xmlDocument = new XmlDocument()
+            {
+                XmlResolver = null
+            };
             xmlDocument.Load(memoryStream);
 
             Assert.Equal(2, xmlDocument.ChildNodes.Count);

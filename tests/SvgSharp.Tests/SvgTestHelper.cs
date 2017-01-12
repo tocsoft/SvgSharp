@@ -207,65 +207,21 @@ namespace Svg.UnitTests
         }
 
 
-        /// <summary>
-        /// Load, draw and check svg file.
-        /// </summary>
-        /// <param name="xml">Svg file data.</param>
-        protected virtual void LoadSvg(string path)
-        {
-           // Trace.WriteLine("SvgDocument open xml.");
-            var svgDoc = OpenSvg(path);
-           // Trace.WriteLine("Done SvgDocument open xml.");
 
-            //Trace.WriteLine("Draw svg.");
-            var img = DrawSvg(svgDoc);
-            //Trace.WriteLine("Done drawing.");
-
-            CheckSvg(svgDoc, img);
-        }
-
-
-        /// <summary>
-        /// Open SVG document from XML document.
-        /// </summary>
-        /// <param name="xml">XML document.</param>
-        /// <returns>Open SVG document.</returns>
-        protected virtual SvgDocument OpenSvg(string path)
-        {
-            return SvgDocument.Open(FixPath(path));
-        }
-
-
-        /// <summary>
-        /// Draw SVG.
-        /// </summary>
-        /// <param name="svgDoc">SVG document to draw.</param>
-        /// <returns>SVG as image.</returns>
-        protected virtual INormalImage DrawSvg(SvgDocument svgDoc)
-        {
-#if NET_CORE
-            return SvgSharp.SvgDocumentExtensions.Render(svgDoc).AsImage();
-#else
-            return SvgSharp.SystemDrawing.SvgDocumentExtensions.Render(svgDoc).AsImage();
-#endif
-        }
-
-
-        /// <summary>
-        /// Check svg file data.
-        /// </summary>
-        /// <param name="svgDoc">Svg document.</param>
-        /// <param name="img">Image of svg file from <paramref name="svgDoc"/>.</param>
-        protected virtual void CheckSvg(SvgDocument svgDoc, INormalImage img)
-        {
-            using (var ms = new MemoryStream())
-            {
-                img.Save(ms);
-
-                Assert.True(ms.Length >= ExpectedSize, "Svg file does not match expected minimum size.");
-            }
-        }
-
+//        /// <summary>
+//        /// Draw SVG.
+//        /// </summary>
+//        /// <param name="svgDoc">SVG document to draw.</param>
+//        /// <returns>SVG as image.</returns>
+//        protected virtual INormalImage DrawSvg(SvgDocument svgDoc)
+//        {
+//#if NET_CORE
+//            return SvgSharp.SvgDocumentExtensions.Render(svgDoc).AsImage();
+//#else
+            
+//#endif
+//        }
+        
 
         /// <summary>
         /// Compare Images.

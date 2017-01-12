@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Svg.Pathing
 {
-    //[TypeConverter(typeof(SvgPathBuilder))]
+    [TypeConverter(typeof(SvgPathBuilder))]
     public sealed class SvgPathSegmentList : IList<SvgPathSegment>
     {
         internal SvgPath _owner;

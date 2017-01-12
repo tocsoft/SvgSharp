@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace Svg
 {
     /// <summary>Specifies the shape to be used at the end of open subpaths when they are stroked.</summary>
-    //[TypeConverter(typeof(SvgStrokeLineCapConverter))]
+    [TypeConverter(typeof(SvgStrokeLineCapConverter))]
     public enum SvgStrokeLineCap
     {
         /// <summary>The value is inherited from the parent element.</summary>

@@ -6,7 +6,7 @@ namespace Svg
 	/// <summary>
 	/// Description of SvgAspectRatio.
 	/// </summary>
-	//[TypeConverter(typeof(SvgPreserveAspectRatioConverter))]
+	[TypeConverter(typeof(SvgAspectRatioConverter))]
 	public class SvgAspectRatio
 	{
 		public SvgAspectRatio() : this(SvgPreserveAspectRatio.none)
@@ -45,13 +45,11 @@ namespace Svg
 
 		public override string ToString()
 		{
-            throw new System.NotImplementedException();
-            //return TypeDescriptor.GetConverter(typeof(SvgPreserveAspectRatio)).ConvertToString(this.Align) + (Slice ? " slice" : "");
+            return this.Align.ToString() + (Slice ? " slice" : "");
         }
 
 	}
 	
-    //[TypeConverter(typeof(SvgPreserveAspectRatioConverter))]
 	public enum SvgPreserveAspectRatio
 	{
 		xMidYMid, //default

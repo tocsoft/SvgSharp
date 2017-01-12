@@ -20,9 +20,9 @@ namespace Svg
         public const string XLinkNamespace = "http://www.w3.org/1999/xlink";
         public const string XmlNamespace = "http://www.w3.org/XML/1998/namespace";
 
+        public static readonly string DefaultNamespace = SvgNamespace;
         public static readonly List<KeyValuePair<string, string>> Namespaces = new List<KeyValuePair<string, string>>()
                                                                             {
-                                                                                new KeyValuePair<string, string>("", SvgNamespace),
                                                                                 new KeyValuePair<string, string>(XLinkPrefix, XLinkNamespace),
                                                                                 new KeyValuePair<string, string>("xml", XmlNamespace)
                                                                             };

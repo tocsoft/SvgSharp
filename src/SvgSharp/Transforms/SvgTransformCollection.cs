@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Svg.Transforms
 {
-    //[TypeConverter(typeof(SvgTransformConverter))]
+    [TypeConverter(typeof(SvgTransformConverter))]
     public class SvgTransformCollection : List<SvgTransform>//, ICloneable
     {
     	private void AddItem(SvgTransform item)

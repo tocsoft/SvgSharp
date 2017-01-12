@@ -10,7 +10,7 @@ namespace Svg
     /// <summary>
     /// Represents a unit in an Scalable Vector Graphics document.
     /// </summary>
-    //[TypeConverter(typeof(SvgUnitConverter))]
+    [TypeConverter(typeof(SvgUnitConverter))]
     public struct SvgUnit
     {
         private SvgUnitType _type;

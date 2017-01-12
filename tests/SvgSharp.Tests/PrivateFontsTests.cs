@@ -1,7 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using ImageSharp.Tests.Platform;
 using Xunit;
 
 namespace Svg.UnitTests
@@ -18,20 +20,30 @@ namespace Svg.UnitTests
     /// </remarks>
     public class PrivateFontsTests : SvgTestHelper
     {
-        private const string PrivateFontSvg = "Issue204_PrivateFont\\Text.svg";
-        private const string PrivateFont = "Issue204_PrivateFont\\BrushScriptMT2.ttf";
-        //private const string PrivateFontName = "Brush Script MT2";
 
-        protected override int ExpectedSize { get { return 3200; } } //3512
-
-
-        [Fact]
-        public void TestPrivateFont()
+        public static TheoryData<string, string, int> ExpectedRenderedFileSizes = new TheoryData<string, string, int>
         {
-            AddFontFromResource(SvgElement.PrivateFonts, GetFullResourceString(PrivateFont));
-            LoadSvg(PrivateFontSvg);
-        }
+            { "Issue204_PrivateFont\\Text.svg", "Issue204_PrivateFont\\BrushScriptMT2.ttf", 3200 },
+        };
 
+        [Theory]
+        [MemberData(nameof(ExpectedRenderedFileSizes))]
+        public void TestImageIsRendered(string svgPath, string fontPath, int fileSize)
+        {
+            svgPath = FixPath(svgPath);
+            fontPath = FixPath(fontPath);
+            AddFontFromResource(SvgElement.PrivateFonts, fontPath);
+
+            var svgDoc = SvgDocument.Open(svgPath);
+            var img = SvgSharp.SystemDrawing.SvgDocumentExtensions.Render(svgDoc).AsImage();
+
+            using (var ms = new MemoryStream())
+            {
+                img.Save(ms);
+
+                Assert.True(ms.Length >= ExpectedSize, "Svg file does not match expected minimum size.");
+            }
+        }
 
         private void AddFontFromResource(IEnumerable<IFont> privateFontCollection, string fullFontResourceString)
         {

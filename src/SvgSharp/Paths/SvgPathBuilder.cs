@@ -20,7 +20,7 @@ namespace Svg
         }
     }
 
-    public class SvgPathBuilder// : TypeConverter
+    public class SvgPathBuilder : SimpleBaseConverter<SvgPathSegmentList>
     {
         /// <summary>
         /// Parses the specified string into a collection of path segments.
@@ -92,8 +92,8 @@ namespace Svg
                     {
                         // A|a rx ry x-axis-rotation large-arc-flag sweep-flag x y
                         segments.Add(new SvgArcSegment(segments.Last.End, coords[0], coords[1], coords[2],
-                            (size ? SvgArcSize.Large : SvgArcSize.Small), 
-                            (sweep ? SvgArcSweep.Positive : SvgArcSweep.Negative), 
+                            (size ? SvgArcSize.Large : SvgArcSize.Small),
+                            (sweep ? SvgArcSweep.Positive : SvgArcSweep.Negative),
                             ToAbsolute(coords[3], coords[4], segments, isRelative)));
                     }
                     break;
@@ -287,7 +287,7 @@ namespace Svg
             }
         }
 
-        
+
 
         //private static IEnumerable<float> ParseCoordinates(string coords)
         //{
@@ -506,49 +506,22 @@ namespace Svg
         //    }
         //}
 
-        //public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        //{
-        //    if (value is string)
-        //    {
-        //        return Parse((string)value);
-        //    }
+        public override SvgPathSegmentList Convert(string value)
+        {
+            return Parse(value);
+        }
 
-        //    return base.ConvertFrom(context, culture, value);
-        //}
+        public override string Convert(SvgPathSegmentList value)
+        {
+            var paths = value as SvgPathSegmentList;
 
-        //public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        //{
-        //    if (destinationType == typeof(string))
-        //    {
-        //        var paths = value as SvgPathSegmentList;
+            if (paths != null)
+            {
+                var s = string.Join(" ", paths.Select(p => p.ToString()).ToArray());
+                return s;
+            }
 
-        //        if (paths != null)
-        //        {
-        //            var curretCulture = CultureInfo.CurrentCulture;
-        //            try {
-        //                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-        //                var s = string.Join(" ", paths.Select(p => p.ToString()).ToArray());
-        //                return s;
-        //            }
-        //            finally
-        //            {
-        //                // Make sure to set back the old culture even an error occurred.
-        //                Thread.CurrentThread.CurrentCulture = curretCulture;
-        //            }
-        //        }
-        //    }
-
-        //    return base.ConvertTo(context, culture, value, destinationType);
-        //}
-
-        //public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        //{
-        //    if (destinationType == typeof(string))
-        //    {
-        //        return true;
-        //    }
-
-        //    return base.CanConvertTo(context, destinationType);
-        //}
+            return null;
+        }
     }
 }

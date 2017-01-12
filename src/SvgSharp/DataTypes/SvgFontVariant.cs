@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Svg
 {
-    //[TypeConverter(typeof(SvgFontVariantConverter))]
+    [TypeConverter(typeof(SvgFontVariantConverter))]
     public enum SvgFontVariant
     {
         Normal,

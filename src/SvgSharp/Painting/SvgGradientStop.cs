@@ -56,13 +56,13 @@ namespace Svg
         /// Gets or sets the colour of the gradient stop.
         /// </summary>
         [SvgAttribute("stop-color")]
-        //[TypeConverter(typeof(SvgPaintServerFactory))]
+        [TypeConverter(typeof(SvgPaintServerFactory))]
         public override SvgPaintServer StopColor
         {
             get 
             {
-                var direct = this.Attributes.GetAttribute<SvgPaintServer>("stop-color", SvgColourServer.NotSet);
-                if (direct == SvgColourServer.Inherit) return this.Attributes["stop-color"] as SvgPaintServer ?? SvgColourServer.NotSet;
+                var direct = this.Attributes.GetAttribute<SvgPaintServer>("stop-color", SvgColorServer.NotSet);
+                if (direct == SvgColorServer.Inherit) return this.Attributes["stop-color"] as SvgPaintServer ?? SvgColorServer.NotSet;
                 return direct;
             }
             set { this.Attributes["stop-color"] = value; }

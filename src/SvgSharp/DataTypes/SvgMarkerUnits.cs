@@ -3,7 +3,7 @@
 namespace Svg.DataTypes
 {
     /// <summary>Defines the coordinate system for attributes ‘markerWidth’, ‘markerHeight’ and the contents of the ‘marker’.</summary>
-	//[TypeConverter(typeof(SvgMarkerUnitsConverter))]
+	[TypeConverter(typeof(SvgMarkerUnitsConverter))]
 	public enum SvgMarkerUnits
 	{
         /// <summary>If markerUnits="strokeWidth", ‘markerWidth’, ‘markerHeight’ and the contents of the ‘marker’ represent values in a coordinate system which has a single unit equal the size in user units of the current stroke width (see the ‘stroke-width’ property) in place for the graphic object referencing the marker.</summary>

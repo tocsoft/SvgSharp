@@ -11,7 +11,7 @@ namespace Svg
     /// <summary>
     /// Represents the base class for all paint servers that are intended to be used as a fill or stroke.
     /// </summary>
-    //[TypeConverter(typeof(SvgPaintServerFactory))]
+  [TypeConverter(typeof(SvgPaintServerFactory))]
     public abstract class SvgPaintServer : SvgElement
     {
         public Func<SvgPaintServer> GetCallback { get; set; }
@@ -19,7 +19,7 @@ namespace Svg
         /// <summary>
         /// An unspecified <see cref="SvgPaintServer"/>.
         /// </summary>
-        public static readonly SvgPaintServer None = new SvgColourServer();
+        public static readonly SvgPaintServer None = new SvgColorServer();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvgPaintServer"/> class.

@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Svg
 {
-    internal class SvgPaintServerFactory : BaseConverter<SvgPaintServer>
+    internal class SvgPaintServerFactory : BaseConverter<SvgPaintServer, string>
     {
         private static readonly SvgColourConverter _colourConverter;
 
@@ -19,68 +19,67 @@ namespace Svg
 
         public static SvgPaintServer Create(string value, SvgDocument document)
         {
-                throw new NotImplementedException();
-            //// If it's pointing to a paint server
-            //if (string.IsNullOrEmpty(value))
-            //{
-            //    return SvgColourServer.NotSet;
-            //}
-            //else if (value == "inherit")
-            //{
-            //    return SvgColourServer.Inherit;
-            //}
-            //else if (value == "currentColor")
-            //{
-            //    return new SvgDeferredPaintServer(document, value);
-            //}
-            //else
-            //{
-            //    var servers = new List<SvgPaintServer>();
-                
-            //    while (!string.IsNullOrEmpty(value))
-            //    {
-            //        if (value.StartsWith("url(#"))
-            //        {
-            //            var leftParen = value.IndexOf(')', 5);
-            //            Uri id = new Uri(value.Substring(5, leftParen - 5), UriKind.Relative);
-            //            value = value.Substring(leftParen + 1).Trim();
-            //            servers.Add((SvgPaintServer)document.IdManager.GetElementById(id));
-            //        }
-            //        // If referenced to to a different (linear or radial) gradient
-            //        else if (document.IdManager.GetElementById(value) != null && document.IdManager.GetElementById(value).GetType().BaseType == typeof(SvgGradientServer))
-            //        {
-            //            return (SvgPaintServer)document.IdManager.GetElementById(value);
-            //        }
-            //        else if (value.StartsWith("#")) // Otherwise try and parse as colour
-            //        {
-            //            switch(CountHexDigits(value, 1))
-            //            {
-            //                case 3:
-            //                    servers.Add(new SvgColourServer((Color)_colourConverter.ConvertFrom(value.Substring(0, 4))));
-            //                    value = value.Substring(4).Trim();
-            //                    break;
-            //                case 6:
-            //                    servers.Add(new SvgColourServer((Color)_colourConverter.ConvertFrom(value.Substring(0, 7))));
-            //                    value = value.Substring(7).Trim();
-            //                    break;
-            //                default:
-            //                    return new SvgDeferredPaintServer(document, value);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            return new SvgColourServer((Color)_colourConverter.ConvertFrom(value.Trim()));
-            //        }
-            //    }
+            // If it's pointing to a paint server
+            if (string.IsNullOrEmpty(value))
+            {
+                return SvgColorServer.NotSet;
+            }
+            else if (value == "inherit")
+            {
+                return SvgColorServer.Inherit;
+            }
+            else if (value == "currentColor")
+            {
+                return new SvgDeferredPaintServer(document, value);
+            }
+            else
+            {
+                var servers = new List<SvgPaintServer>();
 
-            //    if (servers.Count > 1)
-            //    {
-            //        return new SvgFallbackPaintServer(servers[0], servers.Skip(1));
-            //    }
-            //    return servers[0];
-            //} 
-                
-                
+                while (!string.IsNullOrEmpty(value))
+                {
+                    if (value.StartsWith("url(#"))
+                    {
+                        var leftParen = value.IndexOf(')', 5);
+                        Uri id = new Uri(value.Substring(5, leftParen - 5), UriKind.Relative);
+                        value = value.Substring(leftParen + 1).Trim();
+                        servers.Add((SvgPaintServer)document.IdManager.GetElementById(id));
+                    }
+                    // If referenced to to a different (linear or radial) gradient
+                    else if (document.IdManager.GetElementById(value) != null && document.IdManager.GetElementById(value).GetType().GetTypeInfo().BaseType == typeof(SvgGradientServer))
+                    {
+                        return (SvgPaintServer)document.IdManager.GetElementById(value);
+                    }
+                    else if (value.StartsWith("#")) // Otherwise try and parse as colour
+                    {
+                        switch (CountHexDigits(value, 1))
+                        {
+                            case 3:
+                                servers.Add(new SvgColorServer(_colourConverter.Convert(value.Substring(0, 4))));
+                                value = value.Substring(4).Trim();
+                                break;
+                            case 6:
+                                servers.Add(new SvgColorServer(_colourConverter.Convert(value.Substring(0, 7))));
+                                value = value.Substring(7).Trim();
+                                break;
+                            default:
+                                return new SvgDeferredPaintServer(document, value);
+                        }
+                    }
+                    else
+                    {
+                        return new SvgColorServer(_colourConverter.Convert(value.Trim()));
+                    }
+                }
+
+                if (servers.Count > 1)
+                {
+                    return new SvgFallbackPaintServer(servers[0], servers.Skip(1));
+                }
+                return servers[0];
+            }
+
+
         }
 
         private static int CountHexDigits(string value, int start)

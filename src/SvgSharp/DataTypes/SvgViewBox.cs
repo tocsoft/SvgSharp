@@ -11,7 +11,7 @@ namespace Svg
     /// <summary>
     /// It is often desirable to specify that a given set of graphics stretch to fit a particular container element. The viewBox attribute provides this capability.
     /// </summary>
-    //[TypeConverter(typeof(SvgViewBoxConverter))]
+    [TypeConverter(typeof(SvgViewBoxConverter))]
     public struct SvgViewBox
     {
         public static readonly SvgViewBox Empty = new SvgViewBox();
@@ -89,39 +89,39 @@ namespace Svg
         
         #region Equals and GetHashCode implementation
         public override bool Equals(object obj)
-		{
-			return (obj is SvgViewBox) && Equals((SvgViewBox)obj);
-		}
+        {
+            return (obj is SvgViewBox) && Equals((SvgViewBox)obj);
+        }
         
-		public bool Equals(SvgViewBox other)
-		{
-			return this.MinX == other.MinX 
-				&& this.MinY == other.MinY 
-				&& this.Width == other.Width 
-				&& this.Height == other.Height;
-		}
+        public bool Equals(SvgViewBox other)
+        {
+            return this.MinX == other.MinX 
+                && this.MinY == other.MinY 
+                && this.Width == other.Width 
+                && this.Height == other.Height;
+        }
         
-		public override int GetHashCode()
-		{
-			int hashCode = 0;
-			unchecked {
-				hashCode += 1000000007 * MinX.GetHashCode();
-				hashCode += 1000000009 * MinY.GetHashCode();
-				hashCode += 1000000021 * Width.GetHashCode();
-				hashCode += 1000000033 * Height.GetHashCode();
-			}
-			return hashCode;
-		}
+        public override int GetHashCode()
+        {
+            int hashCode = 0;
+            unchecked {
+                hashCode += 1000000007 * MinX.GetHashCode();
+                hashCode += 1000000009 * MinY.GetHashCode();
+                hashCode += 1000000021 * Width.GetHashCode();
+                hashCode += 1000000033 * Height.GetHashCode();
+            }
+            return hashCode;
+        }
         
-		public static bool operator ==(SvgViewBox lhs, SvgViewBox rhs)
-		{
-			return lhs.Equals(rhs);
-		}
+        public static bool operator ==(SvgViewBox lhs, SvgViewBox rhs)
+        {
+            return lhs.Equals(rhs);
+        }
         
-		public static bool operator !=(SvgViewBox lhs, SvgViewBox rhs)
-		{
-			return !(lhs == rhs);
-		}
+        public static bool operator !=(SvgViewBox lhs, SvgViewBox rhs)
+        {
+            return !(lhs == rhs);
+        }
         #endregion
 
         public void AddViewBoxTransform(SvgAspectRatio aspectRatio, ISvgRenderer renderer, SvgFragment frag)
@@ -209,71 +209,40 @@ namespace Svg
         }
     }
 
-    //internal class SvgViewBoxConverter : TypeConverter
-    //{
-    //    /// <summary>
-    //    /// Converts the given object to the type of this converter, using the specified context and culture information.
-    //    /// </summary>
-    //    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context.</param>
-    //    /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
-    //    /// <param name="value">The <see cref="T:System.Object"/> to convert.</param>
-    //    /// <returns>
-    //    /// An <see cref="T:System.Object"/> that represents the converted value.
-    //    /// </returns>
-    //    /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
-    //    public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-    //    {
-    //        if (value is string)
-    //        {
-    //            string[] coords = ((string)value).Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+    internal class SvgViewBoxConverter : SimpleBaseConverter<SvgViewBox>
+    {
+        /// <summary>
+        /// Converts the given object to the type of this converter, using the specified context and culture information.
+        /// </summary>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
+        /// <param name="value">The <see cref="T:System.Object"/> to convert.</param>
+        /// <returns>
+        /// An <see cref="T:System.Object"/> that represents the converted value.
+        /// </returns>
+        /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
+        public override SvgViewBox Convert(string value)
+        {
+            string[] coords = ((string)value).Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-    //            if (coords.Length != 4)
-    //            {
-    //                throw new SvgException("The 'viewBox' attribute must be in the format 'minX, minY, width, height'.");
-    //            }
+            if (coords.Length != 4)
+            {
+                throw new SvgException("The 'viewBox' attribute must be in the format 'minX, minY, width, height'.");
+            }
 
-    //            return new SvgViewBox(float.Parse(coords[0], NumberStyles.Float, CultureInfo.InvariantCulture),
-    //                float.Parse(coords[1], NumberStyles.Float, CultureInfo.InvariantCulture),
-    //                float.Parse(coords[2], NumberStyles.Float, CultureInfo.InvariantCulture),
-    //                float.Parse(coords[3], NumberStyles.Float, CultureInfo.InvariantCulture));
-    //        }
+            return new SvgViewBox(float.Parse(coords[0], NumberStyles.Float, CultureInfo.InvariantCulture),
+                float.Parse(coords[1], NumberStyles.Float, CultureInfo.InvariantCulture),
+                float.Parse(coords[2], NumberStyles.Float, CultureInfo.InvariantCulture),
+                float.Parse(coords[3], NumberStyles.Float, CultureInfo.InvariantCulture));
+        }
 
-    //        return base.ConvertFrom(context, culture, value);
-    //    }
+        public override string Convert(SvgViewBox viewBox)
+        {
+            return string.Format("{0}, {1}, {2}, {3}",
+                viewBox.MinX.ToString(CultureInfo.InvariantCulture), viewBox.MinY.ToString(CultureInfo.InvariantCulture),
+                viewBox.Width.ToString(CultureInfo.InvariantCulture), viewBox.Height.ToString(CultureInfo.InvariantCulture));
 
-    //    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-    //    {
-    //        if (sourceType == typeof(string))
-    //        {
-    //            return true;
-    //        }
-
-    //        return base.CanConvertFrom(context, sourceType);
-    //    }
-
-    //    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-    //    {
-    //        if (destinationType == typeof(string))
-    //        {
-    //            return true;
-    //        }
-
-    //        return base.CanConvertTo(context, destinationType);
-    //    }
-
-    //    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-    //    {
-    //        if (destinationType == typeof(string))
-    //        {
-    //            var viewBox = (SvgViewBox)value;
-
-    //            return string.Format("{0}, {1}, {2}, {3}",
-    //                viewBox.MinX.ToString(CultureInfo.InvariantCulture), viewBox.MinY.ToString(CultureInfo.InvariantCulture),
-    //                viewBox.Width.ToString(CultureInfo.InvariantCulture), viewBox.Height.ToString(CultureInfo.InvariantCulture));
-    //        }
-
-    //        return base.ConvertTo(context, culture, value, destinationType);
-    //    }
-    //}
+        }
+    }
 
 }

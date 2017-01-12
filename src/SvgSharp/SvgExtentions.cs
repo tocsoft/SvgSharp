@@ -31,18 +31,17 @@ namespace Svg
 
         public static string GetXML(this SvgDocument doc)
         {
-            throw new NotImplementedException();
-            //var ret = "";
+            var ret = "";
 
-            //using (var ms = new MemoryStream())
-            //{
-            //    doc.Write(ms);
-            //    ms.Position = 0;
-            //    var sr = new StreamReader(ms);
-            //    ret = sr.ReadToEnd();
-            //}
+            using (var ms = new MemoryStream())
+            {
+                doc.Write(ms);
+                ms.Position = 0;
+                var sr = new StreamReader(ms);
+                ret = sr.ReadToEnd();
+            }
 
-            //return ret;
+            return ret;
         }
 
         public static string GetXML(this SvgElement elem)

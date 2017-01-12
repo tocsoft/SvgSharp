@@ -10,7 +10,7 @@ namespace Svg
     /// <summary>
     /// Defines the various coordinate units certain SVG elements may use.
     /// </summary>
-    //[TypeConverter(typeof(SvgCoordinateUnitsConverter))]
+    [TypeConverter(typeof(SvgCoordinateUnitsConverter))]
     public enum SvgCoordinateUnits
     {
         //TODO Inherit is not actually valid

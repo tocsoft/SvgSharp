@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace Svg
 {
     /// <summary>Specifies the shape to be used at the corners of paths or basic shapes when they are stroked.</summary>
-    //[TypeConverter(typeof(SvgStrokeLineJoinConverter))]
+    [TypeConverter(typeof(SvgStrokeLineJoinConverter))]
     public enum SvgStrokeLineJoin
     {
         /// <summary>The value is inherited from the parent element.</summary>

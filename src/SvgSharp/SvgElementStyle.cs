@@ -40,7 +40,7 @@ namespace Svg
         [SvgAttribute("fill", true)]
         public virtual SvgPaintServer Fill
         {
-            get { return ((SvgPaintServer)this.Attributes["fill"] ?? SvgColourServer.NotSet); }
+            get { return ((SvgPaintServer)this.Attributes["fill"] ?? SvgColorServer.NotSet); }
             set { this.Attributes["fill"] = value; }
         }
 
@@ -131,7 +131,7 @@ namespace Svg
         /// </summary>
         /// <remarks>Apparently this can be set on non-sensical elements.  Don't ask; just check the tests.</remarks>
         [SvgAttribute("stop-color", true)]
-        //[TypeConverter(typeof(SvgPaintServerFactory))]
+        [TypeConverter(typeof(SvgPaintServerFactory))]
         public virtual SvgPaintServer StopColor
         {
             get { return this.Attributes["stop-color"] as SvgPaintServer; }
@@ -276,7 +276,7 @@ namespace Svg
                                 sizes = part.Split('/');
                                 try
                                 {
-                                    fontSize = new SvgUnitConverter().ConvertFromInvariantString(sizes[0]);
+                                    fontSize = new SvgUnitConverter().Convert(sizes[0]);
                                     success = true;
                                     this.FontSize = fontSize;
                                 }

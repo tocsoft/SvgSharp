@@ -11,7 +11,7 @@ namespace SvgSharp.SystemDrawing
     {
         public static System.Drawing.Image Render(this SvgDocument document)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("System.Drawing Rendering not yet supported ");
         }
     }
 }

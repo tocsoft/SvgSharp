@@ -9,10 +9,18 @@ using System.Text.RegularExpressions;
 
 namespace Svg
 {
-    public sealed class SvgUnitConverter //: TypeConverter
+    public sealed class SvgUnitConverter :SimpleBaseConverter<SvgUnit>
     {
-        public SvgUnit ConvertFromInvariantString(string unit)
+        public override string Convert(SvgUnit unit)
         {
+            return unit.ToString();
+        }
+
+        public override SvgUnit Convert(string unit)
+        {
+            // http://www.w3.org/TR/CSS21/syndata.html#values
+            // http://www.w3.org/TR/SVG11/coords.html#Units
+
             if (unit == null)
             {
                 return new SvgUnit(SvgUnitType.User, 0.0f);
@@ -65,55 +73,5 @@ namespace Svg
                     throw new FormatException("Unit is in an invalid format '" + unit + "'.");
             }
         }
-
-        //public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-        //{
-        //    if (value == null)
-        //    {
-        //        return new SvgUnit(SvgUnitType.User, 0.0f);
-        //    }
-
-        //    if (!(value is string))
-        //    {
-        //        throw new ArgumentOutOfRangeException("value must be a string.");
-        //    }
-
-        //    // http://www.w3.org/TR/CSS21/syndata.html#values
-        //    // http://www.w3.org/TR/SVG11/coords.html#Units
-
-        //    string unit = (string)value;
-        //    return ConvertFromInvariantString(unit);
-
-        //}
-
-        //public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        //{
-        //    if (sourceType == typeof(string))
-        //    {
-        //        return true;
-        //    }
-
-        //    return base.CanConvertFrom(context, sourceType);
-        //}
-
-        //public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        //{
-        //    if (destinationType == typeof(string))
-        //    {
-        //        return true;
-        //    }
-
-        //    return base.CanConvertTo(context, destinationType);
-        //}
-
-        //public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        //{
-        //    if (destinationType == typeof(string))
-        //    {
-        //        return ((SvgUnit)value).ToString();
-        //    }
-
-        //    return base.ConvertTo(context, culture, value, destinationType);
-        //}
     }
 }

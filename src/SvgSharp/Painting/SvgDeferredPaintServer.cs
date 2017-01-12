@@ -32,8 +32,8 @@ namespace Svg
                 if (this.DeferredId == "currentColor" && styleOwner != null) 
                 {
                     var colorElement = (from e in styleOwner.ParentsAndSelf.OfType<SvgElement>()
-                                        where e.Color != SvgPaintServer.None && e.Color != SvgColourServer.NotSet && 
-                                              e.Color != SvgColourServer.Inherit && e.Color != SvgColourServer.None
+                                        where e.Color != SvgPaintServer.None && e.Color != SvgColorServer.NotSet && 
+                                              e.Color != SvgColorServer.Inherit && e.Color != SvgColorServer.None
                                         select e).FirstOrDefault();
                     _concreteServer = (colorElement == null ? SvgPaintServer.None : colorElement.Color);
                 }

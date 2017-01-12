@@ -30,7 +30,7 @@ namespace Svg
                 if (typeConverter == null)
                 {
                     // property doesn't have one set, use the declaued types converter
-                    typeConverter = info.DeclaringType.GetTypeInfo().GetCustomAttribute<TypeConverterAttribute>(true);
+                    typeConverter = info.PropertyType.GetTypeInfo().GetCustomAttribute<TypeConverterAttribute>(true);
                 }
                 this.TypeConverter = typeConverter;
                 this.Property = info;
@@ -40,6 +40,35 @@ namespace Svg
             public SvgAttributeAttribute Attribute;
 
             public TypeConverterAttribute TypeConverter { get; private set; }
+
+            public string GetValue(object @this, SvgDocument doc)
+            {
+                object propertyValue = Property.GetValue(@this);
+                
+                return ConvertValue(propertyValue, doc);
+            }
+            public string ConvertValue(object propertyValue, SvgDocument doc)
+            {
+
+                if (TypeConverter != null)
+                {
+                    string value = (string)TypeConverter.TypeConverter.ConvertFrom(propertyValue, doc);
+                }
+
+                return propertyValue?.ToString();
+            }
+            public void SetValue(object @this, string value, SvgDocument doc)
+            {
+                object converted = null;
+                if (TypeConverter != null)
+                {
+                    converted = TypeConverter.TypeConverter.ConvertTo(value, doc);
+                }else
+                {
+                    converted = value;
+                }
+                Property.SetValue(@this, converted);
+            }
         }
 
         protected class EventAttributeTuple
@@ -141,7 +170,7 @@ namespace Svg
         [SvgAttribute("color", true)]
         public virtual SvgPaintServer Color
         {
-            get { return (this.Attributes["color"] == null) ? SvgColourServer.NotSet : (SvgPaintServer)this.Attributes["color"]; }
+            get { return (this.Attributes["color"] == null) ? SvgColorServer.NotSet : (SvgPaintServer)this.Attributes["color"]; }
             set { this.Attributes["color"] = value; }
         }
 
@@ -547,7 +576,7 @@ namespace Svg
         {
              if (this.ElementName != String.Empty)
             {
-                writer.WriteStartElement(this.ElementName);
+                writer.WriteStartElement(this.ElementName, SvgAttributeAttribute.DefaultNamespace);
             }
 
             this.WriteAttributes(writer);
@@ -574,14 +603,14 @@ namespace Svg
                 if (!attr.Attribute.InAttributeDictionary || _attributes.ContainsKey(attr.Attribute.Name))
                 {
                     object propertyValue = attr.Property.GetValue(this);
-                    string value = (string)attr.TypeConverter.TypeConverter.ConvertFrom(propertyValue, doc);
+                    var value = attr.ConvertValue(propertyValue, doc);
 
                     forceWrite = false;
                     writeStyle = (attr.Attribute.Name == "fill");
 
                     if (writeStyle && (Parent != null))
                     {
-                        if (propertyValue == SvgColourServer.NotSet) continue;
+                        if (propertyValue == SvgColorServer.NotSet) continue;
 
                         object parentValue;
                         if (TryResolveParentAttributeValue(attr.Attribute.Name, out parentValue))

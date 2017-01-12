@@ -206,13 +206,13 @@ namespace Svg
         /// <para>Unlike other <see cref="SvgGraphicsElement"/>s, <see cref="SvgText"/> has a default fill of black rather than transparent.</para>
         /// </remarks>
         /// <value>The fill.</value>
+        [TypeConverter(typeof(SvgPaintServerFactory), "black")]
         public override SvgPaintServer Fill
         {
             get {
-                throw new NotImplementedException();
-            //    return (this.Attributes["fill"] == null) ? new SvgColourServer(System.Drawing.Color.Black) : (SvgPaintServer)this.Attributes["fill"];
+                return base.Fill;
             }
-            set { this.Attributes["fill"] = value; }
+            set { base.Fill = value; }
         }
 
         /// <summary>

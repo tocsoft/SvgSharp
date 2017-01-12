@@ -9,7 +9,7 @@ namespace Svg
     /// <summary>
     /// Represents a list of <see cref="SvgUnits"/>.
     /// </summary>
-    //[TypeConverter(typeof(SvgUnitCollectionConverter))]
+    [TypeConverter(typeof(SvgUnitCollectionConverter))]
     public class SvgUnitCollection : List<SvgUnit>
     {
         public override string ToString()
@@ -35,60 +35,41 @@ namespace Svg
         }
     }
 
-    ///// <summary>
-    ///// A class to convert string into <see cref="SvgUnitCollection"/> instances.
-    ///// </summary>
-    //internal class SvgUnitCollectionConverter : TypeConverter
-    //{
-    //    private static readonly SvgUnitConverter _unitConverter = new SvgUnitConverter();
-    //    /// <summary>
-    //    /// Converts the given object to the type of this converter, using the specified context and culture information.
-    //    /// </summary>
-    //    /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context.</param>
-    //    /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
-    //    /// <param name="value">The <see cref="T:System.Object"/> to convert.</param>
-    //    /// <returns>
-    //    /// An <see cref="T:System.Object"/> that represents the converted value.
-    //    /// </returns>
-    //    /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
-    //    public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-    //    {
-    //        if (value is string)
-    //        {
-    //            if (string.Compare(((string)value).Trim(), "none", StringComparison.InvariantCultureIgnoreCase) == 0) return null;
-    //            string[] points = ((string)value).Trim().Split(new char[] { ',', ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-    //            SvgUnitCollection units = new SvgUnitCollection();
+    /// <summary>
+    /// A class to convert string into <see cref="SvgUnitCollection"/> instances.
+    /// </summary>
+    internal class SvgUnitCollectionConverter : SimpleBaseConverter<SvgUnitCollection>
+    {
+        private static readonly SvgUnitConverter _unitConverter = new SvgUnitConverter();
+        /// <summary>
+        /// Converts the given object to the type of this converter, using the specified context and culture information.
+        /// </summary>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that provides a format context.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
+        /// <param name="value">The <see cref="T:System.Object"/> to convert.</param>
+        /// <returns>
+        /// An <see cref="T:System.Object"/> that represents the converted value.
+        /// </returns>
+        /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
+        public override SvgUnitCollection Convert(string value)
+        {
+                if (string.Compare(((string)value).Trim(), "none", StringComparison.OrdinalIgnoreCase) == 0) return null;
+                string[] points = ((string)value).Trim().Split(new char[] { ',', ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                SvgUnitCollection units = new SvgUnitCollection();
 
-    //            foreach (string point in points)
-    //            {
-    //                SvgUnit newUnit = (SvgUnit)_unitConverter.ConvertFrom(point.Trim());
-    //                if (!newUnit.IsNone)
-    //                    units.Add(newUnit);
-    //            }
+                foreach (string point in points)
+                {
+                    SvgUnit newUnit = _unitConverter.Convert(point.Trim());
+                    if (!newUnit.IsNone)
+                        units.Add(newUnit);
+                }
 
-    //            return units;
-    //        }
-
-    //        return base.ConvertFrom(context, culture, value);
-    //    }
-
-    //    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-    //    {
-    //        if (destinationType == typeof(string))
-    //        {
-    //            return true;
-    //        }
-    //        return base.CanConvertTo(context, destinationType);
-    //    }
-
-    //    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-    //    {
-    //        if (value != null && destinationType == typeof(string))
-    //        {
-    //            return ((SvgUnitCollection)value).ToString();
-    //        }
-
-    //        return base.ConvertTo(context, culture, value, destinationType);
-    //    }
-    //}
+                return units;
+        }
+        
+        public override string Convert(SvgUnitCollection value)
+        {
+            return value?.ToString();
+        }
+    }
 }

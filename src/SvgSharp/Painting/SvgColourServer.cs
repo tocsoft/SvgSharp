@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Svg
 {
-    public sealed class SvgColourServer : SvgPaintServer
+    public sealed class SvgColorServer : SvgPaintServer
     {
 
         /// <summary>
@@ -17,29 +17,34 @@ namespace Svg
         /// </summary>
         public static readonly SvgPaintServer Inherit;// = new SvgColourServer(System.Drawing.Color.Black);
 
-        //public SvgColourServer()
-        //    : this(System.Drawing.Color.Black)
-        //{
-        //}
+        public SvgColorServer()
+            : this("black")
+        {
+        }
 
-        //public SvgColourServer(Color colour)
-        //{
-        //    this._colour = colour;
-        //}
+        public SvgColorServer(string color)
+            : this(new Color(color))
+        {
+        }
 
-        //private Color _colour;
+        public SvgColorServer(Color color)
+        {
+            this._color = color;
+        }
 
-        //public Color Colour
-        //{
-        //    get { return this._colour; }
-        //    set { this._colour = value; }
-        //}
+        private Color _color;
+
+        public Color ActualColor
+        {
+            get { return this._color; }
+            set { this._color = value; }
+        }
 
         //public override Brush GetBrush(SvgVisualElement styleOwner, ISvgRenderer renderer, float opacity, bool forStroke = false)
         //{
         //    //is none?
         //    if (this == SvgPaintServer.None) return new SolidBrush(System.Drawing.Color.Transparent);
-                
+
         //    int alpha = (int)Math.Round((opacity * (this.Colour.A/255.0) ) * 255);
         //    Color colour = System.Drawing.Color.FromArgb(alpha, this.Colour);
 
@@ -50,11 +55,10 @@ namespace Svg
         {
         	if(this == SvgPaintServer.None)
         		return "none";
-        	else if(this == SvgColourServer.NotSet)
+        	else if(this == SvgColorServer.NotSet)
         		return "";
 
-            throw new NotImplementedException();
-            //Color c = this.Colour;
+            return this.ActualColor.ToString();
 
             //// Return the name if it exists
             //if (c.IsKnownColor)
@@ -69,39 +73,37 @@ namespace Svg
 
 		public override SvgElement DeepCopy()
 		{
-			return DeepCopy<SvgColourServer>();
+			return DeepCopy<SvgColorServer>();
 		}
 
 
 		public override SvgElement DeepCopy<T>()
         {
-            throw new NotImplementedException();
-   //         var newObj = base.DeepCopy<T>() as SvgColourServer;
-			//newObj.Colour = this.Colour;
-			//return newObj;
+            var newObj = base.DeepCopy<T>() as SvgColorServer;
+			newObj.ActualColor = this.ActualColor;
+			return newObj;
 
 		}
 
         public override bool Equals(object obj)
         {
-            var objColor = obj as SvgColourServer;
+            var objColor = obj as SvgColorServer;
             if (objColor == null)
                 return false;
 
             if ((this == SvgPaintServer.None && obj != SvgPaintServer.None) ||
                 (this != SvgPaintServer.None && obj == SvgPaintServer.None) ||
-                (this == SvgColourServer.NotSet && obj != SvgColourServer.NotSet) ||
-                (this != SvgColourServer.NotSet && obj == SvgColourServer.NotSet) ||
-                (this == SvgColourServer.Inherit && obj != SvgColourServer.Inherit) ||
-                (this != SvgColourServer.Inherit && obj == SvgColourServer.Inherit)) return false;
+                (this == SvgColorServer.NotSet && obj != SvgColorServer.NotSet) ||
+                (this != SvgColorServer.NotSet && obj == SvgColorServer.NotSet) ||
+                (this == SvgColorServer.Inherit && obj != SvgColorServer.Inherit) ||
+                (this != SvgColorServer.Inherit && obj == SvgColorServer.Inherit)) return false;
 
             return this.GetHashCode() == objColor.GetHashCode();
         }
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
-            //return _colour.GetHashCode();
+            return _color.GetHashCode();
         }
     }
 }
