@@ -35,14 +35,14 @@ namespace Svg.Document_Structure
             set { this.Attributes["preserveAspectRatio"] = value; }
         }
 
-        ///// <summary>
-        ///// Gets the <see cref="GraphicsPath"/> for this element.
-        ///// </summary>
-        ///// <value></value>
-        //public override System.Drawing.Drawing2D.GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    return GetPaths(this, renderer);
-        //}
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        /// <value></value>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            return GetPaths(this, renderer);
+        }
 
         /// <summary>
         /// Gets the bounds of the element.

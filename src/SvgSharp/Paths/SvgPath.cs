@@ -76,27 +76,29 @@ namespace Svg
 		{
 			get { return this.Attributes.GetAttribute<Uri>("marker-start").ReplaceWithNullIfNone(); }
 			set { this.Attributes["marker-start"] = value; }
-		}
+        }
 
 
         /// <summary>
-        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// Gets the<see cref= "GraphicsPath" /> for this element.
         /// </summary>
-        //public override GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    if (this._path == null || this.IsPathDirty)
-        //    {
-        //        _path = new GraphicsPath();
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
 
-        //        foreach (SvgPathSegment segment in this.PathData)
-        //        {
-        //            segment.AddToPath(_path);
-        //        }
+            //if (this._path == null || this.IsPathDirty)
+            //{
+            //    _path = new GraphicsPath();
 
-        //        this.IsPathDirty = false;
-        //    }
-        //    return _path;
-        //}
+            //    foreach (SvgPathSegment segment in this.PathData)
+            //    {
+            //        segment.AddToPath(_path);
+            //    }
+
+            //    this.IsPathDirty = false;
+            //}
+            //return _path;
+        }
 
         internal void OnPathUpdated()
         {

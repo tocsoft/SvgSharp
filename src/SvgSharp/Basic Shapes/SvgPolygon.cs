@@ -59,51 +59,53 @@ namespace Svg
             set { this.Attributes["marker-start"] = value; }
         }
 
-        //public override GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    if (this._path == null || this.IsPathDirty)
-        //    {
-        //        this._path = new GraphicsPath();
-        //        this._path.StartFigure();
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
 
-        //        try
-        //        {
-        //            var points = this.Points;
-        //            for (int i = 2; (i + 1) < points.Count; i += 2)
-        //            {
-        //                var endPoint = SvgUnit.GetDevicePoint(points[i], points[i + 1], renderer, this);
+            //if (this._path == null || this.IsPathDirty)
+            //{
+            //    this._path = new GraphicsPath();
+            //    this._path.StartFigure();
 
-        //              // If it is to render, don't need to consider stroke width.
-        //                // i.e stroke width only to be considered when calculating boundary
-        //                if (renderer == null)
-        //                {
-        //                  var radius = base.StrokeWidth / 2;
-        //                  _path.AddEllipse(endPoint.X - radius, endPoint.Y - radius, 2 * radius, 2 * radius);
-        //                  continue;
-        //                }
+            //    try
+            //    {
+            //        var points = this.Points;
+            //        for (int i = 2; (i + 1) < points.Count; i += 2)
+            //        {
+            //            var endPoint = SvgUnit.GetDevicePoint(points[i], points[i + 1], renderer, this);
 
-        //                //first line
-        //                if (_path.PointCount == 0)
-        //                {
-        //                    _path.AddLine(SvgUnit.GetDevicePoint(points[i - 2], points[i - 1], renderer, this), endPoint);
-        //                }
-        //                else
-        //                {
-        //                    _path.AddLine(_path.GetLastPoint(), endPoint);
-        //                }
-        //            }
-        //        }
-        //        catch
-        //        {
-        //            Trace.TraceError("Error parsing points");
-        //        }
+            //            // If it is to render, don't need to consider stroke width.
+            //            // i.e stroke width only to be considered when calculating boundary
+            //            if (renderer == null)
+            //            {
+            //                var radius = base.StrokeWidth / 2;
+            //                _path.AddEllipse(endPoint.X - radius, endPoint.Y - radius, 2 * radius, 2 * radius);
+            //                continue;
+            //            }
 
-        //        this._path.CloseFigure();
-        //        if (renderer != null)
-        //          this.IsPathDirty = false;
-        //    }
-        //    return this._path;
-        //}
+            //            //first line
+            //            if (_path.PointCount == 0)
+            //            {
+            //                _path.AddLine(SvgUnit.GetDevicePoint(points[i - 2], points[i - 1], renderer, this), endPoint);
+            //            }
+            //            else
+            //            {
+            //                _path.AddLine(_path.GetLastPoint(), endPoint);
+            //            }
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        Trace.TraceError("Error parsing points");
+            //    }
+
+            //    this._path.CloseFigure();
+            //    if (renderer != null)
+            //        this.IsPathDirty = false;
+            //}
+            //return this._path;
+        }
 
         /// <summary>
         /// Renders the stroke of the <see cref="SvgVisualElement"/> to the specified <see cref="ISvgRenderer"/>

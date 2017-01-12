@@ -91,37 +91,38 @@ namespace Svg
         {
             get
             {
-                throw new NotImplementedException();
-                //return this.Path(null).GetBounds();
+                //throw new NotImplementedException();
+                return this.Path(null).GetBounds();
             }
         }
 
-        // /// <summary>
-        // /// Gets the <see cref="GraphicsPath"/> representing this element.
-        // /// </summary>
-        // public override GraphicsPath Path(ISvgRenderer renderer)
-        // {
-        //     if (this._path == null || this.IsPathDirty)
-        //     {
-        //float halfStrokeWidth = base.StrokeWidth / 2;
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> representing this element.
+        /// </summary>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
+            //if (this._path == null || this.IsPathDirty)
+            //{
+            //    float halfStrokeWidth = base.StrokeWidth / 2;
 
-        //// If it is to render, don't need to consider stroke width.
-        //// i.e stroke width only to be considered when calculating boundary
-        //if (renderer != null)
-        //{
-        //	halfStrokeWidth = 0;
-        //	this.IsPathDirty = false;
-        //}
+            //    // If it is to render, don't need to consider stroke width.
+            //    // i.e stroke width only to be considered when calculating boundary
+            //    if (renderer != null)
+            //    {
+            //        halfStrokeWidth = 0;
+            //        this.IsPathDirty = false;
+            //    }
 
-        //         _path = new GraphicsPath();
-        //         _path.StartFigure();
-        //	var center = this.Center.ToDeviceValue(renderer, this);
-        //	var radius = this.Radius.ToDeviceValue(renderer, UnitRenderingType.Other, this) + halfStrokeWidth;
-        //	_path.AddEllipse(center.X - radius, center.Y - radius, 2 * radius, 2 * radius);
-        //         _path.CloseFigure();
-        //     }
-        //     return _path;
-        // }
+            //    _path = new GraphicsPath();
+            //    _path.StartFigure();
+            //    var center = this.Center.ToDeviceValue(renderer, this);
+            //    var radius = this.Radius.ToDeviceValue(renderer, UnitRenderingType.Other, this) + halfStrokeWidth;
+            //    _path.AddEllipse(center.X - radius, center.Y - radius, 2 * radius, 2 * radius);
+            //    _path.CloseFigure();
+            //}
+            //return _path;
+        }
 
         /// <summary>
         /// Renders the circle to the specified <see cref="Graphics" /> object.

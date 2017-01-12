@@ -87,13 +87,13 @@ namespace Svg
             Overflow = SvgOverflow.Hidden;
         }
 
-        //public override System.Drawing.Drawing2D.GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    var path = this.Children.FirstOrDefault(x => x is SvgVisualElement);
-        //    if (path != null)
-        //        return (path as SvgVisualElement).Path(renderer);
-        //    return null;
-        //}
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            var path = this.Children.FirstOrDefault(x => x is SvgVisualElement);
+            if (path != null)
+                return (path as SvgVisualElement).Path(renderer);
+            return null;
+        }
 
         public override RectangleF Bounds
         {

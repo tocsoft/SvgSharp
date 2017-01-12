@@ -90,34 +90,35 @@ namespace Svg
             }
         }
 
-       // /// <summary>
-       // /// Gets the <see cref="GraphicsPath"/> for this element.
-       // /// </summary>
-       // /// <value></value>
-       // public override GraphicsPath Path(ISvgRenderer renderer)
-       // {
-       //     if (this._path == null || this.IsPathDirty)
-       //     {
-							//float halfStrokeWidth = base.StrokeWidth / 2;
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        /// <value></value>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
+            //if (this._path == null || this.IsPathDirty)
+            //{
+            //    float halfStrokeWidth = base.StrokeWidth / 2;
 
-							//// If it is to render, don't need to consider stroke width.
-							//// i.e stroke width only to be considered when calculating boundary
-							//if (renderer != null)
-							//{
-							//	halfStrokeWidth = 0;
-							//	this.IsPathDirty = false;
-							//}
+            //    // If it is to render, don't need to consider stroke width.
+            //    // i.e stroke width only to be considered when calculating boundary
+            //    if (renderer != null)
+            //    {
+            //        halfStrokeWidth = 0;
+            //        this.IsPathDirty = false;
+            //    }
 
-       //         var center = SvgUnit.GetDevicePoint(this._centerX, this._centerY, renderer, this);
-							//	var radius = SvgUnit.GetDevicePoint(this._radiusX + halfStrokeWidth, this._radiusY + halfStrokeWidth, renderer, this);
+            //    var center = SvgUnit.GetDevicePoint(this._centerX, this._centerY, renderer, this);
+            //    var radius = SvgUnit.GetDevicePoint(this._radiusX + halfStrokeWidth, this._radiusY + halfStrokeWidth, renderer, this);
 
-       //         this._path = new GraphicsPath();
-       //         _path.StartFigure();
-       //         _path.AddEllipse(center.X - radius.X, center.Y - radius.Y, 2 * radius.X, 2 * radius.Y);
-       //         _path.CloseFigure();
-       //     }
-       //     return _path;
-       // }
+            //    this._path = new GraphicsPath();
+            //    _path.StartFigure();
+            //    _path.AddEllipse(center.X - radius.X, center.Y - radius.Y, 2 * radius.X, 2 * radius.Y);
+            //    _path.CloseFigure();
+            //}
+            //return _path;
+        }
 
         /// <summary>
         /// Renders the <see cref="SvgElement"/> and contents to the specified <see cref="Graphics"/> object.

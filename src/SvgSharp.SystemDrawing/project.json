@@ -45,7 +45,8 @@
     "SvgSharp": {
       "target": "project",
       "version": "0.0.1-*"
-    }
+    },
+    "System.Runtime": "4.3.0"
   },
   "frameworks": {
     "net46": {

@@ -11,12 +11,12 @@ namespace Svg
     public abstract partial class SvgVisualElement : SvgElement, ISvgBoundable, ISvgStylable, ISvgClipable
     {
         private bool? _requiresSmoothRendering;
-      //  private Region _previousClip;
+        private IRegion _previousClip;
 
         /// <summary>
         /// Gets the <see cref="GraphicsPath"/> for this element.
         /// </summary>
-        //public abstract GraphicsPath Path(ISvgRenderer renderer);
+        public abstract IPath Path(ISvgRenderer renderer);
 
         PointF ISvgBoundable.Location
         {
@@ -130,65 +130,65 @@ namespace Svg
 
         private void Render(ISvgRenderer renderer, bool renderFilter)
         {
-            throw new NotImplementedException();
+            if (this.Visible && this.Displayable && this.PushTransforms(renderer) &&
+                (!Renderable || this.Path(renderer) != null))
+            {
+                bool renderNormal = true;
 
-            //if (this.Visible && this.Displayable && this.PushTransforms(renderer) &&
-            //    (!Renderable || this.Path(renderer) != null))
-            //{
-            //    bool renderNormal = true;
-
-            //    if (renderFilter && this.Filter != null)
-            //    {
-            //        var filterPath = this.Filter;
-            //        if (filterPath.ToString().StartsWith("url("))
-            //        {
-            //            filterPath = new Uri(filterPath.ToString().Substring(4, filterPath.ToString().Length - 5), UriKind.RelativeOrAbsolute);
-            //        }
-            //        var filter = this.OwnerDocument.IdManager.GetElementById(filterPath) as FilterEffects.SvgFilter;
-            //        if (filter != null)
-            //        {
-            //            this.PopTransforms(renderer);
-            //            try
-            //            {
-            //                filter.ApplyFilter(this, renderer, (r) => this.Render(r, false));
-            //            }
-            //            catch (Exception ex) { Debug.Print(ex.ToString()); }
-            //            renderNormal = false;
-            //        }
-            //    }
+                if (renderFilter && this.Filter != null)
+                {
+                    var filterPath = this.Filter;
+                    if (filterPath.ToString().StartsWith("url("))
+                    {
+                        filterPath = new Uri(filterPath.ToString().Substring(4, filterPath.ToString().Length - 5), UriKind.RelativeOrAbsolute);
+                    }
+                    var filter = this.OwnerDocument.IdManager.GetElementById(filterPath) as FilterEffects.SvgFilter;
+                    if (filter != null)
+                    {
+                        this.PopTransforms(renderer);
+                        try
+                        {
+                            filter.ApplyFilter(this, renderer, (r) => this.Render(r, false));
+                        }
+                        catch (Exception ex) {
+                        //    Debug.Print(ex.ToString());
+                        }
+                        renderNormal = false;
+                    }
+                }
 
 
-            //    if (renderNormal)
-            //    {
-            //        this.SetClip(renderer);
+                if (renderNormal)
+                {
+                    this.SetClip(renderer);
 
-            //        if (Renderable)
-            //        {
-            //            // If this element needs smoothing enabled turn anti-aliasing on
-            //            if (this.RequiresSmoothRendering)
-            //            {
-            //                renderer.SmoothingMode = SmoothingMode.AntiAlias;
-            //            }
+                    if (Renderable)
+                    {
+                        // If this element needs smoothing enabled turn anti-aliasing on
+                        if (this.RequiresSmoothRendering)
+                        {
+                            renderer.AntiAlias = true;
+                        }
 
-            //            this.RenderFill(renderer);
-            //            this.RenderStroke(renderer);
+                        this.RenderFill(renderer);
+                        this.RenderStroke(renderer);
 
-            //            // Reset the smoothing mode
-            //            if (this.RequiresSmoothRendering && renderer.SmoothingMode == SmoothingMode.AntiAlias)
-            //            {
-            //                renderer.SmoothingMode = SmoothingMode.Default;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            base.RenderChildren(renderer);
-            //        }
+                        // Reset the smoothing mode
+                        if (this.RequiresSmoothRendering && renderer.AntiAlias)
+                        {
+                            renderer.AntiAlias = false;
+                        }
+                    }
+                    else
+                    {
+                        base.RenderChildren(renderer);
+                    }
 
-            //        this.ResetClip(renderer);
-            //        this.PopTransforms(renderer);
-            //    }
+                    this.ResetClip(renderer);
+                    this.PopTransforms(renderer);
+                }
 
-            //}
+            }
         }
 
         /// <summary>
@@ -303,31 +303,29 @@ namespace Svg
         /// <param name="renderer">The <see cref="ISvgRenderer"/> to have its clipping region set.</param>
         protected internal virtual void SetClip(ISvgRenderer renderer)
         {
-            throw new NotImplementedException();
+            if (this.ClipPath != null || !string.IsNullOrEmpty(this.Clip))
+            {
+                this._previousClip = renderer.GetClip();
 
-            //if (this.ClipPath != null || !string.IsNullOrEmpty(this.Clip))
-            //{
-            //    this._previousClip = renderer.GetClip();
+                if (this.ClipPath != null)
+                {
+                    SvgClipPath clipPath = this.OwnerDocument.GetElementById<SvgClipPath>(this.ClipPath.ToString());
+                    if (clipPath != null) renderer.SetClip(clipPath.GetClipRegion(this), CombineMode.Intersect);
+                }
 
-            //    if (this.ClipPath != null)
-            //    {
-            //        SvgClipPath clipPath = this.OwnerDocument.GetElementById<SvgClipPath>(this.ClipPath.ToString());
-            //        if (clipPath != null) renderer.SetClip(clipPath.GetClipRegion(this), CombineMode.Intersect);
-            //    }
-
-            //    var clip = this.Clip;
-            //    if (!string.IsNullOrEmpty(clip) && clip.StartsWith("rect("))
-            //    {
-            //        clip = clip.Trim();
-            //        var offsets = (from o in clip.Substring(5, clip.Length - 6).Split(',')
-            //                       select float.Parse(o.Trim())).ToList();
-            //        var bounds = this.Bounds;
-            //        var clipRect = new RectangleF(bounds.Left + offsets[3], bounds.Top + offsets[0],
-            //                                      bounds.Width - (offsets[3] + offsets[1]),
-            //                                      bounds.Height - (offsets[2] + offsets[0]));
-            //        renderer.SetClip(new Region(clipRect), CombineMode.Intersect);
-            //    }
-            //}
+                var clip = this.Clip;
+                if (!string.IsNullOrEmpty(clip) && clip.StartsWith("rect("))
+                {
+                    clip = clip.Trim();
+                    var offsets = (from o in clip.Substring(5, clip.Length - 6).Split(',')
+                                   select float.Parse(o.Trim())).ToList();
+                    var bounds = this.Bounds;
+                    var clipRect = new RectangleF(bounds.Left + offsets[3], bounds.Top + offsets[0],
+                                                  bounds.Width - (offsets[3] + offsets[1]),
+                                                  bounds.Height - (offsets[2] + offsets[0]));
+                    renderer.SetClip(clipRect, CombineMode.Intersect);
+                }
+            }
         }
 
         /// <summary>
@@ -336,13 +334,11 @@ namespace Svg
         /// <param name="renderer">The <see cref="ISvgRenderer"/> to have its clipping region reset.</param>
         protected internal virtual void ResetClip(ISvgRenderer renderer)
         {
-
-            throw new NotImplementedException();
-            //if (this._previousClip != null)
-            //{
-            //    renderer.SetClip(this._previousClip);
-            //    this._previousClip = null;
-            //}
+            if (this._previousClip != null)
+            {
+                renderer.SetClip(this._previousClip);
+                this._previousClip = null;
+            }
         }
 
         /// <summary>

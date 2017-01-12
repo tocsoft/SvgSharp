@@ -30,41 +30,42 @@ namespace Svg
             this.ClipPathUnits = SvgCoordinateUnits.Inherit;
         }
 
-        //private GraphicsPath cachedClipPath = null;
+        private IPath cachedClipPath = null;
 
-        ///// <summary>
-        ///// Gets this <see cref="SvgClipPath"/>'s region to be used as a clipping region.
-        ///// </summary>
-        ///// <returns>A new <see cref="Region"/> containing the <see cref="Region"/> to be used for clipping.</returns>
-        //public Region GetClipRegion(SvgVisualElement owner)
-        //{
-        //    if (cachedClipPath == null || this._pathDirty)
-        //    {
-        //        cachedClipPath = new GraphicsPath();
+        /// <summary>
+        /// Gets this <see cref="SvgClipPath"/>'s region to be used as a clipping region.
+        /// </summary>
+        /// <returns>A new <see cref="Region"/> containing the <see cref="Region"/> to be used for clipping.</returns>
+        public IRegion GetClipRegion(SvgVisualElement owner)
+        {
+            throw new NotImplementedException();
+            //if (cachedClipPath == null || this._pathDirty)
+            //{
+            //    cachedClipPath = new GraphicsPath();
 
-        //        foreach (SvgElement element in this.Children)
-        //        {
-        //            this.CombinePaths(cachedClipPath, element);
-        //        }
+            //    foreach (SvgElement element in this.Children)
+            //    {
+            //        this.CombinePaths(cachedClipPath, element);
+            //    }
 
-        //        this._pathDirty = false;
-        //    }
+            //    this._pathDirty = false;
+            //}
 
-        //    var result = cachedClipPath;
-        //    if (ClipPathUnits == SvgCoordinateUnits.ObjectBoundingBox)
-        //    {
-        //        result = (GraphicsPath)cachedClipPath.Clone();
-        //        using (var transform = new Matrix())
-        //        {
-        //            var bounds = owner.Bounds;
-        //            transform.Scale(bounds.Width, bounds.Height, MatrixOrder.Append);
-        //            transform.Translate(bounds.Left, bounds.Top, MatrixOrder.Append);
-        //            result.Transform(transform);
-        //        }
-        //    }
+            //var result = cachedClipPath;
+            //if (ClipPathUnits == SvgCoordinateUnits.ObjectBoundingBox)
+            //{
+            //    result = (GraphicsPath)cachedClipPath.Clone();
+            //    using (var transform = new Matrix())
+            //    {
+            //        var bounds = owner.Bounds;
+            //        transform.Scale(bounds.Width, bounds.Height, MatrixOrder.Append);
+            //        transform.Translate(bounds.Left, bounds.Top, MatrixOrder.Append);
+            //        result.Transform(transform);
+            //    }
+            //}
 
-        //    return new Region(result);
-        //}
+            //return new Region(result);
+        }
 
         ///// <summary>
         ///// 

@@ -163,31 +163,30 @@ namespace Svg
 
         protected override void Render(ISvgRenderer renderer)
         {
-            throw new System.NotImplementedException();
-            //switch (this.Overflow)
-            //{
-            //    case SvgOverflow.Auto:
-            //    case SvgOverflow.Visible:
-            //    case SvgOverflow.Scroll:
-            //        base.Render(renderer);
-            //        break;
-            //    default:
-            //        var prevClip = renderer.GetClip();
-            //        try
-            //        {
-            //            var size = (this.Parent == null ? renderer.GetBoundable().Bounds.Size : GetDimensions());
-            //            var clip = new RectangleF(this.X.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
-            //                                      this.Y.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
-            //                                      size.Width, size.Height);
-            //            renderer.SetClip(new Region(clip), CombineMode.Intersect);
-            //            base.Render(renderer);
-            //        }
-            //        finally
-            //        {
-            //            renderer.SetClip(prevClip, CombineMode.Replace);
-            //        }
-            //        break;
-            //}
+            switch (this.Overflow)
+            {
+                case SvgOverflow.Auto:
+                case SvgOverflow.Visible:
+                case SvgOverflow.Scroll:
+                    base.Render(renderer);
+                    break;
+                default:
+                    var prevClip = renderer.GetClip();
+                    try
+                    {
+                        var size = (this.Parent == null ? renderer.GetBoundable().Bounds.Size : GetDimensions());
+                        var clip = new RectangleF(this.X.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
+                                                  this.Y.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
+                                                  size.Width, size.Height);
+                        renderer.SetClip(clip, CombineMode.Intersect);
+                        base.Render(renderer);
+                    }
+                    finally
+                    {
+                        renderer.SetClip(prevClip, CombineMode.Replace);
+                    }
+                    break;
+            }
         }
 
         ///// <summary>

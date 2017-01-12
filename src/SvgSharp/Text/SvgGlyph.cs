@@ -9,7 +9,7 @@ namespace Svg
     [SvgElement("glyph")]
     public class SvgGlyph : SvgVisualElement
     {
-        //private GraphicsPath _path;
+        private IPath _path;
 
         /// <summary>
         /// Gets or sets a <see cref="SvgPathSegmentList"/> of path data.
@@ -59,24 +59,26 @@ namespace Svg
         }
 
 
-        ///// <summary>
-        ///// Gets the <see cref="GraphicsPath"/> for this element.
-        ///// </summary>
-        //public override GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    if (this._path == null || this.IsPathDirty)
-        //    {
-        //        _path = new GraphicsPath();
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
 
-        //        foreach (SvgPathSegment segment in this.PathData)
-        //        {
-        //            segment.AddToPath(_path);
-        //        }
+            //if (this._path == null || this.IsPathDirty)
+            //{
+            //    _path = new GraphicsPath();
 
-        //        this.IsPathDirty = false;
-        //    }
-        //    return _path;
-        //}
+            //    foreach (SvgPathSegment segment in this.PathData)
+            //    {
+            //        segment.AddToPath(_path);
+            //    }
+
+            //    this.IsPathDirtys = false;
+            //}
+            //return _path;
+        }
 
         /// <summary>
         /// Gets the bounds of the element.

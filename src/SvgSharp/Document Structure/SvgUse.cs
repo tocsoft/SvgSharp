@@ -56,11 +56,11 @@ namespace Svg
             this.Y = 0;
         }
 
-        //public override System.Drawing.Drawing2D.GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    SvgVisualElement element = (SvgVisualElement)this.OwnerDocument.IdManager.GetElementById(this.ReferencedElement);
-        //    return (element != null) ? element.Path(renderer) : null;
-        //}
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            SvgVisualElement element = (SvgVisualElement)this.OwnerDocument.IdManager.GetElementById(this.ReferencedElement);
+            return (element != null) ? element.Path(renderer) : null;
+        }
 
         public override RectangleF Bounds
         {

@@ -90,25 +90,27 @@ namespace Svg
                                                   this.Height.ToDeviceValue(null, UnitRenderingType.Vertical, this))); }
         }
 
-        ///// <summary>
-        ///// Gets the <see cref="GraphicsPath"/> for this element.
-        ///// </summary>
-        //public override GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //  if (_path == null)
-        //  {
-        //    // Same size of rectangle can suffice to provide bounds of the image
-        //    var rectangle = new RectangleF(Location.ToDeviceValue(renderer, this),
-        //        SvgUnit.GetDeviceSize(Width, Height, renderer, this));
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
 
-        //    _path = new GraphicsPath();
-        //    _path.StartFigure();
-        //    _path.AddRectangle(rectangle);
-        //    _path.CloseFigure();
-        //  }
+            //if (_path == null)
+            //{
+            //     Same size of rectangle can suffice to provide bounds of the image
+            //    var rectangle = new RectangleF(Location.ToDeviceValue(renderer, this),
+            //        SvgUnit.GetDeviceSize(Width, Height, renderer, this));
 
-        //  return _path;
-        //}
+            //    _path = new GraphicsPath();
+            //    _path.StartFigure();
+            //    _path.AddRectangle(rectangle);
+            //    _path.CloseFigure();
+            //}
+
+            //return _path;
+        }
 
         /// <summary>
         /// Renders the <see cref="SvgElement"/> and contents to the specified <see cref="Graphics"/> object.

@@ -290,26 +290,28 @@ namespace Svg
         {
             return 0f;
         }
-        
-        //private GraphicsPath _path;
 
-        ///// <summary>
-        ///// Gets the <see cref="GraphicsPath"/> for this element.
-        ///// </summary>
-        ///// <value></value>
-        //public override GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    //if there is a TSpan inside of this text element then path should not be null (even if this text is empty!)
-        //    var nodes = GetContentNodes().Where(x => x is SvgContentNode &&
-        //                                             string.IsNullOrEmpty(x.Content.Trim(new[] { '\r', '\n', '\t' })));
+        private IPath _path;
 
-        //    if (_path == null || IsPathDirty || nodes.Count() == 1)
-        //    {
-        //        renderer = (renderer ?? SvgRenderer.FromNull());
-        //        SetPath(new TextDrawingState(renderer, this));
-        //    }
-        //    return _path;
-        //}
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        /// <value></value>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
+
+            ////if there is a TSpan inside of this text element then path should not be null (even if this text is empty!)
+            //var nodes = GetContentNodes().Where(x => x is SvgContentNode &&
+            //                                         string.IsNullOrEmpty(x.Content.Trim(new[] { '\r', '\n', '\t' })));
+
+            //if (_path == null || IsPathDirty || nodes.Count() == 1)
+            //{
+            //    renderer = (renderer ?? SvgRenderer.FromNull());
+            //    SetPath(new TextDrawingState(renderer, this));
+            //}
+            //return _path;
+        }
 
         private void SetPath(TextDrawingState state)
         {

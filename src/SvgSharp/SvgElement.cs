@@ -87,7 +87,7 @@ namespace Svg
         //private EventHandlerList _eventHandlers;
         private SvgElementCollection _children;
         private static readonly object _loadEventKey = new object();
-        //private Region _graphicsClip;
+        private IRegion _graphicsClip;
         private Matrix _graphicsMatrix;
         private SvgCustomAttributeCollection _customAttributes;
         private List<ISvgNode> _nodes = new List<ISvgNode>();
@@ -337,7 +337,7 @@ namespace Svg
         protected internal virtual bool PushTransforms(ISvgRenderer renderer)
         {
             _graphicsMatrix = renderer.Transform;
-            //_graphicsClip = renderer.GetClip();
+            _graphicsClip = renderer.GetClip();
 
             // Return if there are no transforms
             if (this.Transforms == null || this.Transforms.Count == 0)
@@ -365,9 +365,9 @@ namespace Svg
         protected internal virtual void PopTransforms(ISvgRenderer renderer)
         {
             renderer.Transform = _graphicsMatrix;
-            //_graphicsMatrix = null;
-            //renderer.SetClip(_graphicsClip);
-            //_graphicsClip = null;
+            _graphicsMatrix = null;
+            renderer.SetClip(_graphicsClip);
+            _graphicsClip = null;
         }
 
         /// <summary>
@@ -781,7 +781,7 @@ namespace Svg
         {
             this.Render(renderer);
         }
-        
+
         ///// <summary>
         ///// Recursive method to add up the paths of all children
         ///// </summary>
@@ -802,7 +802,7 @@ namespace Svg
         //			if(!(child is SvgGroup))
         //			{
         //				var childPath = ((SvgVisualElement)child).Path(null);
-        				
+
         //				if (childPath != null)
         //				{
         //					childPath = (GraphicsPath)childPath.Clone();
@@ -817,54 +817,55 @@ namespace Svg
         //        if (!(child is SvgPaintServer)) AddPaths(child, path);
         //	}
         //}
-        
+
         /// <summary>
         /// Recursive method to add up the paths of all children
         /// </summary>
         /// <param name="elem"></param>
         /// <param name="path"></param>
-        //protected GraphicsPath GetPaths(SvgElement elem, ISvgRenderer renderer)
-        //{
-        //	var ret = new GraphicsPath();
-        	
-        //	foreach(var child in elem.Children)
-        //	{
-        //		if (child is SvgVisualElement)
-        //		{
-        //			if(!(child is SvgGroup))
-        //			{
-        //                var childPath = ((SvgVisualElement)child).Path(renderer);
-        				
-      		//			// Non-group element can have child element which we have to consider. i.e tspan in text element
-      		//			if (child.Children.Count > 0)
-    				//  		childPath.AddPath(GetPaths(child, renderer), false);
+        protected IPath GetPaths(SvgElement elem, ISvgRenderer renderer)
+        {
+            throw new NotImplementedException();
+            //var ret = new GraphicsPath();
 
-        //				if (childPath != null && childPath.PointCount > 0)
-        //				{
-        //					childPath = (GraphicsPath)childPath.Clone();
-        //					if(child.Transforms != null)
-        //						childPath.Transform(child.Transforms.GetMatrix());
-        					
-        //					ret.AddPath(childPath, false);
-        //				}
-        //			}
-        //			else
-        //			{
-				    //    var childPath = GetPaths(child, renderer);
-        //				if (childPath != null && childPath.PointCount > 0)
-        //				{
-        //					if (child.Transforms != null)
-						  //      childPath.Transform(child.Transforms.GetMatrix());
-                  
-					   //     ret.AddPath(childPath, false);
-				    //    }
-        //			}
-        //		}
-        			
-        //	}
-        	
-        //	return ret;
-        //}
+            //foreach (var child in elem.Children)
+            //{
+            //    if (child is SvgVisualElement)
+            //    {
+            //        if (!(child is SvgGroup))
+            //        {
+            //            var childPath = ((SvgVisualElement)child).Path(renderer);
+
+            //            // Non-group element can have child element which we have to consider. i.e tspan in text element
+            //            if (child.Children.Count > 0)
+            //                childPath.AddPath(GetPaths(child, renderer), false);
+
+            //            if (childPath != null && childPath.PointCount > 0)
+            //            {
+            //                childPath = (GraphicsPath)childPath.Clone();
+            //                if (child.Transforms != null)
+            //                    childPath.Transform(child.Transforms.GetMatrix());
+
+            //                ret.AddPath(childPath, false);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            var childPath = GetPaths(child, renderer);
+            //            if (childPath != null && childPath.PointCount > 0)
+            //            {
+            //                if (child.Transforms != null)
+            //                    childPath.Transform(child.Transforms.GetMatrix());
+
+            //                ret.AddPath(childPath, false);
+            //            }
+            //        }
+            //    }
+
+            //}
+
+            //return ret;
+        }
 
         /// <summary>
         /// Creates a new object that is a copy of the current instance.

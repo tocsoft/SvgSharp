@@ -126,86 +126,85 @@ namespace Svg
 
         public void AddViewBoxTransform(SvgAspectRatio aspectRatio, ISvgRenderer renderer, SvgFragment frag)
         {
-            throw new System.NotImplementedException();
 
-            //var x = (frag == null ? 0 : frag.X.ToDeviceValue(renderer, UnitRenderingType.Horizontal, frag));
-            //var y = (frag == null ? 0 : frag.Y.ToDeviceValue(renderer, UnitRenderingType.Vertical, frag));
+            var x = (frag == null ? 0 : frag.X.ToDeviceValue(renderer, UnitRenderingType.Horizontal, frag));
+            var y = (frag == null ? 0 : frag.Y.ToDeviceValue(renderer, UnitRenderingType.Vertical, frag));
 
-            //if (this.Equals(SvgViewBox.Empty))
-            //{
-            //    renderer.TranslateTransform(x, y, MatrixOrder.Prepend);
-            //    return;
-            //}
+            if (this.Equals(SvgViewBox.Empty))
+            {
+                renderer.TranslateTransform(x, y, MatrixOrder.Prepend);
+                return;
+            }
 
-            //var width = (frag == null ? this.Width : frag.Width.ToDeviceValue(renderer, UnitRenderingType.Horizontal, frag));
-            //var height = (frag == null ? this.Height : frag.Height.ToDeviceValue(renderer, UnitRenderingType.Vertical, frag));
+            var width = (frag == null ? this.Width : frag.Width.ToDeviceValue(renderer, UnitRenderingType.Horizontal, frag));
+            var height = (frag == null ? this.Height : frag.Height.ToDeviceValue(renderer, UnitRenderingType.Vertical, frag));
 
-            //var fScaleX = width / this.Width;
-            //var fScaleY = height / this.Height; //(this.MinY < 0 ? -1 : 1) * 
-            //var fMinX = -this.MinX * fScaleX;
-            //var fMinY = -this.MinY * fScaleY;
+            var fScaleX = width / this.Width;
+            var fScaleY = height / this.Height; //(this.MinY < 0 ? -1 : 1) * 
+            var fMinX = -this.MinX * fScaleX;
+            var fMinY = -this.MinY * fScaleY;
 
-            //if (aspectRatio == null) aspectRatio = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid, false);
-            //if (aspectRatio.Align != SvgPreserveAspectRatio.none)
-            //{
-            //    if (aspectRatio.Slice)
-            //    {
-            //        fScaleX = Math.Max(fScaleX, fScaleY);
-            //        fScaleY = Math.Max(fScaleX, fScaleY);
-            //    }
-            //    else
-            //    {
-            //        fScaleX = Math.Min(fScaleX, fScaleY);
-            //        fScaleY = Math.Min(fScaleX, fScaleY);
-            //    }
-            //    float fViewMidX = (this.Width / 2) * fScaleX;
-            //    float fViewMidY = (this.Height / 2) * fScaleY;
-            //    float fMidX = width / 2;
-            //    float fMidY = height / 2;
-            //    fMinX = -this.MinX * fScaleX;
-            //    fMinY = -this.MinY * fScaleY;
+            if (aspectRatio == null) aspectRatio = new SvgAspectRatio(SvgPreserveAspectRatio.xMidYMid, false);
+            if (aspectRatio.Align != SvgPreserveAspectRatio.none)
+            {
+                if (aspectRatio.Slice)
+                {
+                    fScaleX = Math.Max(fScaleX, fScaleY);
+                    fScaleY = Math.Max(fScaleX, fScaleY);
+                }
+                else
+                {
+                    fScaleX = Math.Min(fScaleX, fScaleY);
+                    fScaleY = Math.Min(fScaleX, fScaleY);
+                }
+                float fViewMidX = (this.Width / 2) * fScaleX;
+                float fViewMidY = (this.Height / 2) * fScaleY;
+                float fMidX = width / 2;
+                float fMidY = height / 2;
+                fMinX = -this.MinX * fScaleX;
+                fMinY = -this.MinY * fScaleY;
 
-            //    switch (aspectRatio.Align)
-            //    {
-            //        case SvgPreserveAspectRatio.xMinYMin:
-            //            break;
-            //        case SvgPreserveAspectRatio.xMidYMin:
-            //            fMinX += fMidX - fViewMidX;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMaxYMin:
-            //            fMinX += width - this.Width * fScaleX;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMinYMid:
-            //            fMinY += fMidY - fViewMidY;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMidYMid:
-            //            fMinX += fMidX - fViewMidX;
-            //            fMinY += fMidY - fViewMidY;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMaxYMid:
-            //            fMinX += width - this.Width * fScaleX;
-            //            fMinY += fMidY - fViewMidY;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMinYMax:
-            //            fMinY += height - this.Height * fScaleY;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMidYMax:
-            //            fMinX += fMidX - fViewMidX;
-            //            fMinY += height - this.Height * fScaleY;
-            //            break;
-            //        case SvgPreserveAspectRatio.xMaxYMax:
-            //            fMinX += width - this.Width * fScaleX;
-            //            fMinY += height - this.Height * fScaleY;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            
-            //renderer.SetClip(new Region(new RectangleF(x, y, width, height)), CombineMode.Intersect);
-            //renderer.TranslateTransform(x, y, MatrixOrder.Prepend);
-            //renderer.TranslateTransform(fMinX, fMinY, MatrixOrder.Prepend);
-            //renderer.ScaleTransform(fScaleX, fScaleY, MatrixOrder.Prepend);       
+                switch (aspectRatio.Align)
+                {
+                    case SvgPreserveAspectRatio.xMinYMin:
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMin:
+                        fMinX += fMidX - fViewMidX;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMin:
+                        fMinX += width - this.Width * fScaleX;
+                        break;
+                    case SvgPreserveAspectRatio.xMinYMid:
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMid:
+                        fMinX += fMidX - fViewMidX;
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMid:
+                        fMinX += width - this.Width * fScaleX;
+                        fMinY += fMidY - fViewMidY;
+                        break;
+                    case SvgPreserveAspectRatio.xMinYMax:
+                        fMinY += height - this.Height * fScaleY;
+                        break;
+                    case SvgPreserveAspectRatio.xMidYMax:
+                        fMinX += fMidX - fViewMidX;
+                        fMinY += height - this.Height * fScaleY;
+                        break;
+                    case SvgPreserveAspectRatio.xMaxYMax:
+                        fMinX += width - this.Width * fScaleX;
+                        fMinY += height - this.Height * fScaleY;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            renderer.SetClip(new RectangleF(x, y, width, height), CombineMode.Intersect);
+            renderer.TranslateTransform(x, y, MatrixOrder.Prepend);
+            renderer.TranslateTransform(fMinX, fMinY, MatrixOrder.Prepend);
+            renderer.ScaleTransform(fScaleX, fScaleY, MatrixOrder.Prepend);
         }
     }
 

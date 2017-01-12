@@ -13,14 +13,14 @@ namespace Svg
         {
         }
 
-        ///// <summary>
-        ///// Gets the <see cref="GraphicsPath"/> for this element.
-        ///// </summary>
-        ///// <value></value>
-        //public override System.Drawing.Drawing2D.GraphicsPath Path(ISvgRenderer renderer)
-        //{
-        //    return GetPaths(this, renderer);
-        //}
+        /// <summary>
+        /// Gets the <see cref="GraphicsPath"/> for this element.
+        /// </summary>
+        /// <value></value>
+        public override IPath Path(ISvgRenderer renderer)
+        {
+            return GetPaths(this, renderer);
+        }
 
         /// <summary>
         /// Gets the bounds of the element.
@@ -59,21 +59,21 @@ namespace Svg
 
         protected override bool Renderable { get { return false; } }
 
-        ///// <summary>
-        ///// Renders the <see cref="SvgElement"/> and contents to the specified <see cref="Graphics"/> object.
-        ///// </summary>
-        ///// <param name="renderer">The <see cref="Graphics"/> object to render to.</param>
-        //protected override void Render(SvgRenderer renderer)
-        //{
-        //    if (!Visible || !Displayable)
-        //        return;
+        /// <summary>
+        /// Renders the <see cref="SvgElement"/> and contents to the specified <see cref="Graphics"/> object.
+        /// </summary>
+        /// <param name="renderer">The <see cref="Graphics"/> object to render to.</param>
+        protected override void Render(ISvgRenderer renderer)
+        {
+            if (!Visible || !Displayable)
+                return;
 
-        //    this.PushTransforms(renderer);
-        //    this.SetClip(renderer);
-        //    base.RenderChildren(renderer);
-        //    this.ResetClip(renderer);
-        //    this.PopTransforms(renderer);
-        //}
+            this.PushTransforms(renderer);
+            this.SetClip(renderer);
+            base.RenderChildren(renderer);
+            this.ResetClip(renderer);
+            this.PopTransforms(renderer);
+        }
 
         public override SvgElement DeepCopy()
         {
