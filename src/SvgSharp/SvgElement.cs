@@ -874,32 +874,32 @@ namespace Svg
 			{
 				newObj.Children.Add(child.DeepCopy());
 			}
+            //TODO Event stuff missing
+			//foreach (var attr in this._svgEventAttributes)
+			//{
+			//	var evt = attr.Event.GetValue(this);
 
-			foreach (var attr in this._svgEventAttributes)
-			{
-				var evt = attr.Event.GetValue(this);
-
-				//if someone has registered also register here
-				if (evt != null)
-				{
-					if(attr.Event.Name == "MouseDown")
-						newObj.MouseDown += delegate {  };
-					else if (attr.Event.Name == "MouseUp")
-						newObj.MouseUp += delegate {  };
-					else if (attr.Event.Name == "MouseOver")
-						newObj.MouseOver += delegate {  };
-					else if (attr.Event.Name == "MouseOut")
-						newObj.MouseOut += delegate {  };
-					else if (attr.Event.Name == "MouseMove")
-						newObj.MouseMove += delegate {  };
-					else if (attr.Event.Name == "MouseScroll")
-						newObj.MouseScroll += delegate {  };
-					else if (attr.Event.Name == "Click")
-						newObj.Click += delegate {  };
-					else if (attr.Event.Name == "Change") //text element
-						(newObj as SvgText).Change += delegate {  };
-				}
-			}
+			//	//if someone has registered also register here
+			//	if (evt != null)
+			//	{
+			//		if(attr.Event.Name == "MouseDown")
+			//			newObj.MouseDown += delegate {  };
+			//		else if (attr.Event.Name == "MouseUp")
+			//			newObj.MouseUp += delegate {  };
+			//		else if (attr.Event.Name == "MouseOver")
+			//			newObj.MouseOver += delegate {  };
+			//		else if (attr.Event.Name == "MouseOut")
+			//			newObj.MouseOut += delegate {  };
+			//		else if (attr.Event.Name == "MouseMove")
+			//			newObj.MouseMove += delegate {  };
+			//		else if (attr.Event.Name == "MouseScroll")
+			//			newObj.MouseScroll += delegate {  };
+			//		else if (attr.Event.Name == "Click")
+			//			newObj.Click += delegate {  };
+			//		else if (attr.Event.Name == "Change") //text element
+			//			(newObj as SvgText).Change += delegate {  };
+			//	}
+			//}
 
 			if(this._customAttributes.Count > 0)
 			{

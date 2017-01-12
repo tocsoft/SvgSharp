@@ -258,17 +258,17 @@ namespace Svg
                         switch (state)
                         {
                             case FontParseState.fontStyle:
-                                success = Enums.TryParse<SvgFontStyle>(part, out fontStyle);
+                                success = Enum.TryParse<SvgFontStyle>(part, true, out fontStyle);
                                 if (success) this.FontStyle = fontStyle;
                                 state++;
                                 break;
                             case FontParseState.fontVariant:
-                                success = Enums.TryParse<SvgFontVariant>(part, out fontVariant);
+                                success = Enum.TryParse<SvgFontVariant>(part, true, out fontVariant);
                                 if (success) this.FontVariant = fontVariant;
                                 state++;
                                 break;
                             case FontParseState.fontWeight:
-                                success = Enums.TryParse<SvgFontWeight>(part, out fontWeight);
+                                success = Enum.TryParse<SvgFontWeight>(part, true, out fontWeight);
                                 if (success) this.FontWeight = fontWeight;
                                 state++;
                                 break;

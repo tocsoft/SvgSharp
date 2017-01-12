@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 //using System.Drawing;
 //using System.Drawing.Drawing2D;
@@ -291,7 +292,7 @@ namespace Svg
         protected override void WriteStartElement(XmlWriter writer)
         {
             base.WriteStartElement(writer);
-
+            
             foreach (var ns in SvgAttributeAttribute.Namespaces)
             {
                 if (string.IsNullOrEmpty(ns.Key))

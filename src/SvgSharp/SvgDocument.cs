@@ -528,7 +528,9 @@ namespace Svg
             var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings()
             {
                 Encoding = useBom ? Encoding.UTF8 : UTF8NoBom,
-                Indent = true
+                Indent = true,
+                NamespaceHandling = NamespaceHandling.Default,
+                
             });
             
             xmlWriter.WriteStartDocument();
