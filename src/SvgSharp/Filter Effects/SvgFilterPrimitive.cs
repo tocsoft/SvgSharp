@@ -34,6 +34,6 @@ namespace Svg.FilterEffects
             get { return (SvgFilter)this.Parent; }
         }
 
-        public abstract void Process(DrawableBuffer buffer);
+        public abstract void Process(ImageBuffer buffer);
     }
 }

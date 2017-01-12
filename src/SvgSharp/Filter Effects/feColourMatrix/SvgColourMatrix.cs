@@ -31,7 +31,7 @@ namespace Svg.FilterEffects
 		public string Values { get; set; }
         
 
-        public override void Process(DrawableBuffer buffer)
+        public override void Process(ImageBuffer buffer)
 		{
             throw new NotImplementedException();
             //var inputImage = buffer[this.Input];

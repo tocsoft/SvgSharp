@@ -15,7 +15,7 @@ namespace Svg
         /// <summary>
         /// Gets or sets a value to determine whether the element will be rendered.
         /// </summary>
-        //[TypeConverter(typeof(SvgBoolConverter))]
+        [TypeConverter(typeof(SvgVisibilityConverter))]
         [SvgAttribute("visibility")]
         public virtual bool Visible
         {

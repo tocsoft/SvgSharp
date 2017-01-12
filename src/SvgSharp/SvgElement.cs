@@ -24,13 +24,27 @@ namespace Svg
         //optimization
         protected class PropertyAttributeTuple
         {
-            //public PropertyDescriptor Property;
+            public PropertyAttributeTuple(PropertyInfo info, SvgAttributeAttribute attribute)
+            {
+                var typeConverter = info.GetCustomAttribute<TypeConverterAttribute>(true);
+                if (typeConverter == null)
+                {
+                    // property doesn't have one set, use the declaued types converter
+                    typeConverter = info.DeclaringType.GetTypeInfo().GetCustomAttribute<TypeConverterAttribute>(true);
+                }
+                this.TypeConverter = typeConverter;
+                this.Property = info;
+                this.Attribute = attribute;
+            }
+            public PropertyInfo Property;
             public SvgAttributeAttribute Attribute;
+
+            public TypeConverterAttribute TypeConverter { get; private set; }
         }
 
         protected class EventAttributeTuple
         {
-            public FieldInfo Event;
+            public EventInfo Event;
             public SvgAttributeAttribute Attribute;
         }
 
@@ -487,16 +501,17 @@ namespace Svg
             Attributes.AttributeChanged += Attributes_AttributeChanged;
             CustomAttributes.AttributeChanged += Attributes_AttributeChanged;
 
+            var typeInfo = this.GetType().GetTypeInfo();
             ////find svg attribute descriptions
-            //_svgPropertyAttributes = from PropertyDescriptor a in TypeDescriptor.GetProperties(this)
-            //                let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
-            //                where attribute != null
-            //                select new PropertyAttributeTuple { Property = a, Attribute = attribute };
+            _svgPropertyAttributes = from PropertyInfo a in typeInfo.DeclaredProperties
+                                     let attribute = a.GetCustomAttribute<SvgAttributeAttribute>()
+                                     where attribute != null
+                                     select new PropertyAttributeTuple(a, attribute);
 
-            //_svgEventAttributes = from EventDescriptor a in TypeDescriptor.GetEvents(this)
-            //                let attribute = a.Attributes[typeof(SvgAttributeAttribute)] as SvgAttributeAttribute
-            //                where attribute != null
-            //                select new EventAttributeTuple { Event = a.ComponentType.GetField(a.Name, BindingFlags.Instance | BindingFlags.NonPublic), Attribute = attribute };
+            _svgEventAttributes = from EventInfo a in typeInfo.DeclaredEvents
+                                  let attribute = a.GetCustomAttribute<SvgAttributeAttribute>()
+                                  where attribute != null
+                                  select new EventAttributeTuple { Event = a, Attribute = attribute };
 
         }
 
@@ -547,69 +562,68 @@ namespace Svg
         }
         protected virtual void WriteAttributes(XmlWriter writer)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
 
-            //var styles = new Dictionary<string, string>();
-            //bool writeStyle;
-            //bool forceWrite;
+            var styles = new Dictionary<string, string>();
+            bool writeStyle;
+            bool forceWrite;
+            var doc = this.OwnerDocument;
+            //properties
+            foreach (var attr in _svgPropertyAttributes)
+            {
+                if (!attr.Attribute.InAttributeDictionary || _attributes.ContainsKey(attr.Attribute.Name))
+                {
+                    object propertyValue = attr.Property.GetValue(this);
+                    string value = (string)attr.TypeConverter.TypeConverter.ConvertFrom(propertyValue, doc);
 
-            ////properties
-            //foreach (var attr in _svgPropertyAttributes)
-            //{
-            //    if (attr.Property.Converter.CanConvertTo(typeof(string)) &&
-            //        (!attr.Attribute.InAttributeDictionary || _attributes.ContainsKey(attr.Attribute.Name)))
-            //    {
-            //        object propertyValue = attr.Property.GetValue(this);
-            //        string value = (string)attr.Property.Converter.ConvertTo(propertyValue, typeof(string));
+                    forceWrite = false;
+                    writeStyle = (attr.Attribute.Name == "fill");
 
-            //        forceWrite = false;
-            //        writeStyle = (attr.Attribute.Name == "fill");
+                    if (writeStyle && (Parent != null))
+                    {
+                        if (propertyValue == SvgColourServer.NotSet) continue;
 
-            //        if (writeStyle && (Parent != null))
-            //        {
-            //            if (propertyValue == SvgColourServer.NotSet) continue;
+                        object parentValue;
+                        if (TryResolveParentAttributeValue(attr.Attribute.Name, out parentValue))
+                        {
+                            if ((parentValue == propertyValue)
+                                || ((parentValue != null) && parentValue.Equals(propertyValue)))
+                                continue;
 
-            //            object parentValue;
-            //            if (TryResolveParentAttributeValue(attr.Attribute.Name, out parentValue))
-            //            {
-            //                if ((parentValue == propertyValue)
-            //                    || ((parentValue != null) && parentValue.Equals(propertyValue)))
-            //                    continue;
+                            forceWrite = true;
+                        }
+                    }
 
-            //                forceWrite = true;
-            //            }
-            //        }
+                    if (propertyValue != null)
+                    {
+                        var type = propertyValue.GetType();
 
-            //        if (propertyValue != null)
-            //        {
-            //            var type = propertyValue.GetType();
-
-            //            //Only write the attribute's value if it is not the default value, not null/empty, or we're forcing the write.
-            //            if ((!string.IsNullOrEmpty(value) && !SvgDefaults.IsDefault(attr.Attribute.Name, value)) || forceWrite)
-            //            {
-            //                if (writeStyle)
-            //                {
-            //                    styles[attr.Attribute.Name] = value;
-            //                }
-            //                else
-            //                {
-            //                    writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
-            //                }
-            //            }
-            //        }
-            //        else if (attr.Attribute.Name == "fill") //if fill equals null, write 'none'
-            //        {
-            //            if (writeStyle)
-            //            {
-            //                styles[attr.Attribute.Name] = value;
-            //            }
-            //            else
-            //            {
-            //                writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
-            //            }
-            //        }
-            //    }
-            //}
+                        //Only write the attribute's value if it is not the default value, not null/empty, or we're forcing the write.
+                        if ((!string.IsNullOrEmpty(value) && !SvgDefaults.IsDefault(attr.Attribute.Name, value)) || forceWrite)
+                        {
+                            if (writeStyle)
+                            {
+                                styles[attr.Attribute.Name] = value;
+                            }
+                            else
+                            {
+                                writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
+                            }
+                        }
+                    }
+                    else if (attr.Attribute.Name == "fill") //if fill equals null, write 'none'
+                    {
+                        if (writeStyle)
+                        {
+                            styles[attr.Attribute.Name] = value;
+                        }
+                        else
+                        {
+                            writer.WriteAttributeString(attr.Attribute.NamespaceAndName, value);
+                        }
+                    }
+                }
+            }
 
             ////events
             //if (AutoPublishEvents)
@@ -626,18 +640,18 @@ namespace Svg
             //    }
             //}
 
-            ////add the custom attributes
-            //foreach (var item in this._customAttributes)
-            //{
-            //    writer.WriteAttributeString(item.Key, item.Value);
-            //}
+            //add the custom attributes
+            foreach (var item in this._customAttributes)
+            {
+                writer.WriteAttributeString(item.Key, item.Value);
+            }
 
-            ////write the style property
-            //if (styles.Any())
-            //{
-            //    writer.WriteAttributeString("style", (from s in styles
-            //                                          select s.Key + ":" + s.Value + ";").Aggregate((p, c) => p + c));
-            //}
+            //write the style property
+            if (styles.Any())
+            {
+                writer.WriteAttributeString("style", (from s in styles
+                                                      select s.Key + ":" + s.Value + ";").Aggregate((p, c) => p + c));
+            }
         }
 
         public bool AutoPublishEvents = true;
